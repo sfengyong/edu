@@ -38,15 +38,11 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: 'style!css'
+                loader: 'style-loader!css-loader'
             },
             {
                 test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-                loader: 'file',
-                query: {
-                    limit: 10000,
-                    name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
-                }
+                loader: 'file-loader'
             }
 
         ]
