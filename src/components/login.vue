@@ -11,7 +11,7 @@
             </el-row>
             <el-row>
                 <el-col :span="10" :offset="7">
-                    <el-button :loading="false">登录</el-button>
+                    <el-button :loading="false" @click="login()">登录</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -23,6 +23,11 @@
         data () {
             return {
                 input:''
+            }
+        },
+        methods:{
+            login:function(){
+
             }
         }
     }
