@@ -1,10 +1,20 @@
 <template>
     <div id="main">
-        <el-carousel :interval="4000" type="card" height="200px">
-            <el-carousel-item v-for="item in 6" :key="item">
-                <h3>{{ item }}</h3>
-            </el-carousel-item>
-        </el-carousel>
+        <router-view></router-view>
+        <footer>
+            <el-row>
+                <el-col :span="12">
+                    <div class="wrap">
+                        <div class="iconfont active">&#xe640;</div>
+                    </div>
+                </el-col>
+                <el-col :span="12">
+                    <div class="wrap">
+                        <div class="iconfont">&#xe601;</div>
+                    </div>
+                </el-col>
+            </el-row>
+        </footer>
     </div>
 </template>
 <script>
@@ -12,20 +22,28 @@
 </script>
 <style lang="scss" rel="stylesheet/scss">
     #main{
-        .el-carousel__item h3 {
-            color: #475669;
-            font-size: 14px;
-            opacity: 0.75;
-            line-height: 200px;
-            margin: 0;
-        }
+        position: relative;
+        width: 100%;
+        height: 100%;
 
-        .el-carousel__item:nth-child(2n) {
-            background-color: #99a9bf;
-        }
-
-        .el-carousel__item:nth-child(2n+1) {
-            background-color: #d3dce6;
+        footer{
+            position: absolute;
+            background: #fafafa;
+            box-sizing:border-box;
+            padding: 0.4rem;
+            width: 100%;
+            z-index: 10;
+            bottom: 0;
+            border-top:0.1rem solid #e5e6e6;
+            .wrap{
+                text-align: center;
+                .iconfont{
+                    font-size: 2.8rem;
+                }
+            }
+            .active{
+                color: #88b3c7 !important;
+            }
         }
     }
 </style>

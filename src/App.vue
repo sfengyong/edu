@@ -15,14 +15,14 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-  @font-face {
-    font-family: 'iconfont';  /* project id 368210 */
-    src: url('http://at.alicdn.com/t/font_jx0vyiu0zhph9f6r.eot');
-    src: url('http://at.alicdn.com/t/font_jx0vyiu0zhph9f6r.eot?#iefix') format('embedded-opentype'),
-    url('http://at.alicdn.com/t/font_jx0vyiu0zhph9f6r.woff') format('woff'),
-    url('http://at.alicdn.com/t/font_jx0vyiu0zhph9f6r.ttf') format('truetype'),
-    url('http://at.alicdn.com/t/font_jx0vyiu0zhph9f6r.svg#iconfont') format('svg');
-  }
+    @font-face {
+        font-family: 'iconfont';  /* project id 368210 */
+        src: url('http://at.alicdn.com/t/font_kdv7ahdttzp30udi.eot');
+        src: url('http://at.alicdn.com/t/font_kdv7ahdttzp30udi.eot?#iefix') format('embedded-opentype'),
+        url('http://at.alicdn.com/t/font_kdv7ahdttzp30udi.woff') format('woff'),
+        url('http://at.alicdn.com/t/font_kdv7ahdttzp30udi.ttf') format('truetype'),
+        url('http://at.alicdn.com/t/font_kdv7ahdttzp30udi.svg#iconfont') format('svg');
+    }
   .iconfont{
     font-family: iconfont;
     font-style: normal;
