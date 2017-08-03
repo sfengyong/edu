@@ -5,12 +5,12 @@
             <el-row>
                 <el-col :span="12">
                     <div class="wrap">
-                        <div class="iconfont active">&#xe640;</div>
+                        <div class="iconfont active" @click="showHomeRouter()">&#xe640;</div>
                     </div>
                 </el-col>
                 <el-col :span="12">
                     <div class="wrap">
-                        <div class="iconfont">&#xe601;</div>
+                        <div class="iconfont" @click="showMeRouter()">&#xe601;</div>
                     </div>
                 </el-col>
             </el-row>
@@ -18,7 +18,24 @@
     </div>
 </template>
 <script>
-
+    export default{
+        name:'main',
+        data(){
+          return {
+              currentRouter: "home"
+          }
+        },
+        methods:{
+            showHomeRouter(){
+                this.$router.push({path:"home"});
+                this.currentRouter = 'home';
+            },
+            showMeRouter(){
+                this.$router.push({path:"me"});
+                this.currentRouter = 'me';
+            }
+        }
+    }
 </script>
 <style lang="scss" rel="stylesheet/scss">
     #main{
