@@ -1,9 +1,8 @@
 <template>
     <div id="me">
-        <header>
-            <span class="name">我</span>
-            <i class="iconfont">&#xe73d;</i>
-        </header>
+        <mt-header fixed title="我">
+            <i class="iconfont" slot="right">&#xe73d;</i>
+        </mt-header>
         <div class="info">
             <div class="avator">
                 <img src="../image/loginbackground.jpg" alt="">
@@ -38,7 +37,9 @@
     </div>
 </template>
 <script>
-
+export default{
+    name:'me'
+}
 </script>
 <style lang="scss" rel="stylesheet/scss">
 #me{

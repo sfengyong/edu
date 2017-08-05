@@ -26,8 +26,13 @@ module.exports = {
             },
             {
                 test: /\.js$/,
+                /*loader: 'babel-loader',*/
+                exclude: /node_modules/,
+                /*exclude: /(node_modules|bower_components)/,*/
                 loader: 'babel-loader',
-                exclude: /node_modules/
+                query: {
+                    presets: ['es2015']
+                }
             },
             {
                 test: /\.(png|jpg|gif|svg)$/,
@@ -43,10 +48,6 @@ module.exports = {
             {
                 test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
                 loader: 'file-loader',
-                /*query: {
-                    limit: 10000,
-                    name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
-                }*/
             }
 
         ]

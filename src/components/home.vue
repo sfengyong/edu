@@ -1,24 +1,27 @@
 <template>
     <div id="home">
-        <header>
-            <span class="name">学霸君</span>
-            <i class="iconfont">&#xe73d;</i>
-        </header>
-        <el-carousel :interval="4000" type="card" height="200px">
-            <el-carousel-item v-for="item in 3" :key="item">
-                <h3>{{ item }}</h3>
-            </el-carousel-item>
-        </el-carousel>
+        <mt-header fixed title="学霸君">
+            <i class="iconfont" slot="right">&#xe73d;</i>
+        </mt-header>
+        <mt-swipe :show-indicators="false">
+            <mt-swipe-item>1</mt-swipe-item>
+            <mt-swipe-item>2</mt-swipe-item>
+            <mt-swipe-item>3</mt-swipe-item>
+        </mt-swipe>
         <div class="function">
             <el-row :gutter="10">
-                <el-col :span="6"><div class="wrap">
-                    <div class="iconfont">&#xe791;</div>
-                    <span class="name">课程管理</span>
-                </div></el-col>
-                <el-col :span="6"><div class="wrap">
-                    <div class="iconfont">&#xe600;</div>
-                    <span class="name">课消统计</span>
-                </div></el-col>
+                <el-col :span="6">
+                    <div class="wrap" @click="courseManage">
+                        <div class="iconfont">&#xe791;</div>
+                        <span class="name">课程管理</span>
+                    </div>
+                </el-col>
+                <el-col :span="6">
+                    <div class="wrap">
+                        <div class="iconfont">&#xe600;</div>
+                        <span class="name">课消统计</span>
+                    </div>
+                </el-col>
             </el-row>
         </div>
         <div class="announcement">
@@ -30,25 +33,24 @@
     </div>
 </template>
 <script>
+export default{
+    name:'home',
+    data(){
+        return {
 
+        }
+    },
+    methods:{
+        courseManage(){
+            this.$router.push({path:"/courseManage"})
+        }
+    }
+}
 </script>
 <style lang="scss" rel="stylesheet/scss">
     #home{
         width: 100%;
         height: 100%;
-        .el-carousel__item h3 {
-            color: #475669;
-            font-size: 14px;
-            opacity: 0.75;
-            line-height: 200px;
-            margin: 0;
-        }
-        .el-carousel__item:nth-child(2n) {
-            background-color: #99a9bf;
-        }
-        .el-carousel__item:nth-child(2n+1) {
-            background-color: #d3dce6;
-        }
         header{
             width: 100%;
             box-sizing: border-box;
@@ -67,8 +69,8 @@
                 font-size: 2rem;
             }
         }
-        .el-carousel{
-            margin-top: 0.4rem;
+        .mint-swipe{
+            height: 25%;
         }
         .function{
             width: 100%;

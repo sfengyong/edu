@@ -6,8 +6,7 @@ import Router from 'vue-router'
 
 import login from "../components/login.vue"
 import main from "../components/main.vue"
-import home from "../components/home.vue"
-import me from  "../components/me.vue"
+import courseManage from "../components/courseManage.vue"
 
 Vue.use(Router);
 const router = new Router({
@@ -19,14 +18,11 @@ const router = new Router({
         },
         {
             path:'/main',
-            component:main,
-            children:[{
-                path:'home',
-                component:home
-            },{
-                path:'me',
-                component:me
-            }]
+            component:main
+        },
+        {
+            path:'/courseManage',
+            component:courseManage,
         },
         {
             path:'*',
