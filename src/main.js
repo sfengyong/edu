@@ -1,19 +1,22 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
 import App from './App.vue'
 import { Row, Col,Input,Button ,Table, TableColumn,} from 'element-ui'
 import router from './routers/routers'
+import axios from "axios"
+
 
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
-
+Vue.use(Vuex)
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(Input)
 Vue.use(Button)
 Vue.use(Table)
 Vue.use(TableColumn)
-
 Vue.use(MintUI)
+Vue.prototype.$http = axios
 
 
 new Vue({

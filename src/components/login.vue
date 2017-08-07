@@ -2,15 +2,15 @@
     <div id="login">
         <div class="loginWrap">
             <el-row>
-                <el-col :span="2" :offset="7"><span class="iconfont">&#xe601;</span></el-col>
-                <el-col :span="8"><el-input v-model="input" placeholder="请输入账号"></el-input></el-col>
+                <el-col :span="2" :offset="4"><span class="iconfont">&#xe601;</span></el-col>
+                <el-col :span="14"><el-input v-model="username" placeholder="请输入账号"></el-input></el-col>
             </el-row>
             <el-row>
-                <el-col :span="2" :offset="7"><span class="iconfont">&#xe63d;</span></el-col>
-                <el-col :span="8"><el-input v-model="input" placeholder="请输入密码"></el-input></el-col>
+                <el-col :span="2" :offset="4"><span class="iconfont">&#xe63d;</span></el-col>
+                <el-col :span="14"><el-input v-model="password" placeholder="请输入密码" type="password"></el-input></el-col>
             </el-row>
             <el-row>
-                <el-col :span="10" :offset="7">
+                <el-col :span="14" :offset="5">
                     <el-button :loading="false" @click="login()">登录</el-button>
                 </el-col>
             </el-row>
@@ -18,16 +18,40 @@
     </div>
 </template>
 <script>
+    import { mapActions } from 'vuex'
+
     export default {
         name: 'login',
         data () {
             return {
-                input:''
+                username:'',
+                password:''
             }
         },
         methods:{
+            ...mapActions([
+                'login'
+            ]),
             login:function(){
+                this.login({
+                    username:this.username,
+                    password:this.password
+                });
 
+                _post("/login",,function (response) {
+
+                },function (error) {
+
+                })
+                this.$http.post("/login",{
+
+                })
+                    .then(function (response) {
+                        this.login(response.data);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
             }
         }
     }
@@ -56,6 +80,8 @@
                         border-bottom: 1px solid #bfcbd9;
                         border-radius: 0px;
                         margin-top: -0.45rem;
+                        color:rgba(255, 255, 255, 0.7);
+                        font-size:1.8rem;
                     }
                     .el-button{
                         width: 100%;

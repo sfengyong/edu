@@ -57,49 +57,52 @@
     </div>
 </template>
 <script>
+    import axios from "axios"
 export default{
     name:'courseManage',
     data(){
         return{
             header:"",
-            sevenDay:[[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}]]
+            sevenDay:[[{time:'',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}]]
         }
     },
     created(){
-        var today = new Date();
-        this.header = new Object();
-        this.header.date = new Array();
-        this.header.month = today.getMonth()+1;
-        var lastmonth = today.getMonth() || 12;
-
-        var currentMonthDay = this.getMonthDay(today.getFullYear(),this.header.month);//当月天数
-        var lastMonthDay = this.getMonthDay(today.getFullYear(),lastmonth);//上个月天数
-
-        var zero = today.getDate() - today.getDay();
-        if(zero < 0){
-            zero = lastMonthDay + zero;
-            this.header.date[0] = zero;
-            for( var i = 1 ; i < 7 ; i++ ){
-                this.header.date[i] = ( this.header.date[i-1]+1 ) % lastMonthDay || lastMonthDay;
-            }
-            var index = this.header.date.indexOf(1);
-            if( index != -1){
-                this.header.date[index] = this.header.month + '月';
-                this.header.month--;
-            }
-        }else{
-            this.header.date[0] = zero;
-            for(var i = 1 ; i < 7 ; i++ ){
-                this.header.date[i] = (this.header.date[i-1]+1) %currentMonthDay || currentMonthDay;
-            }
-            var index = this.header.date.indexOf(1);
-            if( index != -1){
-                this.header.date[index] = this.header.month + 1 + '月';
-            }
-        }
-
+        this.showHeader();
     },
     methods:{
+        showHeader(){
+            var today = new Date();
+            this.header = new Object();
+            this.header.date = new Array();
+            this.header.month = today.getMonth()+1;
+            var lastmonth = today.getMonth() || 12;
+
+            var currentMonthDay = this.getMonthDay(today.getFullYear(),this.header.month);//当月天数
+            var lastMonthDay = this.getMonthDay(today.getFullYear(),lastmonth);//上个月天数
+
+            var zero = today.getDate() - today.getDay();
+            if(zero < 0){
+                zero = lastMonthDay + zero;
+                this.header.date[0] = zero;
+                for( var i = 1 ; i < 7 ; i++ ){
+                    this.header.date[i] = ( this.header.date[i-1]+1 ) % lastMonthDay || lastMonthDay;
+                }
+                var index = this.header.date.indexOf(1);
+                if( index != -1){
+                    this.header.date[index] = this.header.month + '月';
+                    this.header.month--;
+                }
+            }else{
+                this.header.date[0] = zero;
+                for(var i = 1 ; i < 7 ; i++ ){
+                    this.header.date[i] = (this.header.date[i-1]+1) %currentMonthDay || currentMonthDay;
+                }
+                var index = this.header.date.indexOf(1);
+                if( index != -1){
+                    this.header.date[index] = this.header.month + 1 + '月';
+                }
+            }
+        },
         getMonthDay(year,month){
             var thirtyOne = [1,3,5,7,8,10,12];
             var thirty = [4,6,9,11];
@@ -114,6 +117,16 @@ export default{
                     var monthDay = 28;
             }
             return monthDay;
+        },
+        showClass(){
+            this.$http.get("/getArrangeClass",{
+
+            })
+                .then(function () {
+
+                }).catch(function () {
+
+            })
         }
     }
 }
