@@ -8,7 +8,8 @@ import axios from "axios"
 
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
-Vue.use(Vuex)
+import store from "./store"
+
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(Input)
@@ -21,6 +22,7 @@ Vue.prototype.$http = axios
 
 new Vue({
   el: '#app',
-    router:router,
+    router,
+    store,
   render: h => h(App)
 })

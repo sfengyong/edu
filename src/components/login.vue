@@ -11,14 +11,14 @@
             </el-row>
             <el-row>
                 <el-col :span="14" :offset="5">
-                    <el-button :loading="false" @click="login()">登录</el-button>
+                    <el-button :loading="false" @click="Login()">登录</el-button>
                 </el-col>
             </el-row>
         </div>
     </div>
 </template>
 <script>
-    import { mapActions } from 'vuex'
+    import { mapActions,mapGetters } from 'vuex'
 
     export default {
         name: 'login',
@@ -28,30 +28,41 @@
                 password:''
             }
         },
+        computed:{
+            ...mapGetters({
+                token:'token',
+                loginState:'login'
+            })
+        },
+        watch:{
+            loginState:function (newVal,oldVal) {
+                if(newVal){
+                    this.router.replace({ path: "/main"});
+                }
+            }
+        },
         methods:{
             ...mapActions([
-                'login'
+                'login',
+                'getUserInfo'
             ]),
-            login:function(){
-                this.login({
-                    username:this.username,
-                    password:this.password
-                });
-
-                _post("/login",,function (response) {
-
-                },function (error) {
-
-                })
-                this.$http.post("/login",{
-
-                })
-                    .then(function (response) {
-                        this.login(response.data);
+            Login:function(){
+                var _this = this;
+                new Promise(function (resolve,reject) {
+                    _this.login({
+                        username:_this.username,
+                        password:_this.password
+                    });
+                    if(_this.token)
+                        resolve(_this.token);
+                    else
+                        reject()
+                }).then(function (token) {
+                        _this.getUserInfo(token);
+                    },function () {
+                        console.log("token is null")
                     })
-                    .catch(function (error) {
-                        console.log(error);
-                    })
+
             }
         }
     }

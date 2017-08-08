@@ -3,3 +3,4 @@
  */
 export const login = state =>state.login.login;
 export const token = state =>state.login.token;
+export const userInfo = state=>state.userInfo.userInfo;

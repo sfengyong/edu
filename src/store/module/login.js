@@ -1,8 +1,9 @@
 /**
  * Created by Administrator on 2017/8/7.
  */
-import { clearToken , saveToken } from "../../util/token-storage"
+import { clearToken , saveToken ,getToken } from "../../util/token-storage"
 import { _post } from "../../api/axios"
+import { LOGIN ,LOGOUT } from "../mutations-type"
 
 const state = {
     token:{},
@@ -16,6 +17,7 @@ const mutations = {
         state.token = token;
         state.login = true;
         state.logout = false;
+        console.log("set token");
         saveToken(token);
     },
 
@@ -30,7 +32,7 @@ const mutations = {
 const actions = {
     login:( { commit },data ) =>{
         _post(
-            "/login",
+            "/teacherLogin",
             data,
             response =>{
                 commit(LOGIN,response.data);
@@ -38,6 +40,11 @@ const actions = {
             error =>{
                 console.log(error);
             })
+    },
+    getToken:({ commit })=>{
+        const token = getToken();
+        if(token)
+            commit(LOGIN,JSON.parse(token));
     }
 }
 
