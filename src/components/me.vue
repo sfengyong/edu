@@ -8,7 +8,7 @@
                 <img src="../image/loginbackground.jpg" alt="">
                 <span class="edit">编辑</span>
             </div>
-            <div class="name">郭泽伟</div>
+            <div class="name">{{userInfo.name}}</div>
             <div class="position">主职位：教师</div>
         </div>
         <el-row>
@@ -37,8 +37,14 @@
     </div>
 </template>
 <script>
+    import { mapGetters,mapActions } from 'vuex'
 export default{
-    name:'me'
+    name:'me',
+    computed:{
+        ...mapGetters({
+            userInfo:'userInfo'
+        })
+    }
 }
 </script>
 <style lang="scss" rel="stylesheet/scss">

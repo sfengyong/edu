@@ -45,9 +45,9 @@
                     <el-col :span="24"  class="table index">{{item}}</el-col>
                 </el-row>
             </el-col>
-            <el-col :span="3"v-for="day in sevenDay">
-                <el-row v-for="item in day">
-                    <el-col :span="24"  class="table">
+            <el-col :span="3"v-for="(day,dayIndex) in sevenDay">
+                <el-row v-for="(item,itemIndex) in day">
+                    <el-col :span="24"  class="table" @click="detail(dayIndex,itemIndex)">
                         <div>{{item.time}}</div>
                         <div>{{item.courseName}}</div>
                     </el-col>
@@ -57,7 +57,7 @@
     </div>
 </template>
 <script>
-    import axios from "axios"
+    import { mapGetters } from 'vuex'
 export default{
     name:'courseManage',
     data(){
@@ -65,6 +65,12 @@ export default{
             header:"",
             sevenDay:[[{time:'',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}]]
         }
+    },
+    computed:{
+        ...mapGetters({
+            userInfo:'userInfo'
+
+        })
     },
     created(){
         this.showHeader();
@@ -120,13 +126,16 @@ export default{
         },
         showClass(){
             this.$http.get("/getArrangeClass",{
-
+                workNumber:userInfo.workNumber
             })
                 .then(function () {
 
                 }).catch(function () {
 
             })
+        },
+        detail(dayIndex,itemIndex){
+
         }
     }
 }
