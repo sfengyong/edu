@@ -1,7 +1,7 @@
 /**
  * Created by Administrator on 2017/8/7.
  */
-import { clearToken , saveToken ,getToken } from "../../util/token-storage"
+import { clearStorage , saveToStorage ,getFromStorage } from "../../util/dealStorage"
 import { _post } from "../../api/axios"
 import { LOGIN ,LOGOUT } from "../mutations-type"
 
@@ -18,21 +18,21 @@ const mutations = {
         state.login = true;
         state.logout = false;
         console.log("set token");
-        saveToken(token);
+        saveToStorage("token",token);
     },
 
     [LOGOUT](state){
         state.token = {};
         state.login = false;
         state.logout = true;
-        clearToken();
+        clearStorage("token");
     }
 }
 
 const actions = {
     login:( { commit },data ) =>{
         _post(
-            "/teacherLogin",
+            "http://127.0.0.1:3000/teacherLogin",
             data,
             response =>{
                 commit(LOGIN,response.data);
@@ -42,7 +42,7 @@ const actions = {
             })
     },
     getToken:({ commit })=>{
-        const token = getToken();
+        const token = getFromStorage("token");
         if(token)
             commit(LOGIN,JSON.parse(token));
     }

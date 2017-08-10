@@ -47,9 +47,9 @@
             </el-col>
             <el-col :span="3"v-for="(day,dayIndex) in sevenDay">
                 <el-row v-for="(item,itemIndex) in day">
-                    <el-col :span="24"  class="table" @click="detail(dayIndex,itemIndex)">
-                        <div>{{item.time}}</div>
-                        <div>{{item.courseName}}</div>
+                    <el-col :span="24"  class="table">
+                        <div @click="detail(dayIndex,itemIndex)">{{item.time}}</div>
+                        <div @click="detail(dayIndex,itemIndex)">{{item.courseName}}</div>
                     </el-col>
                 </el-row>
             </el-col>
@@ -125,17 +125,18 @@ export default{
             return monthDay;
         },
         showClass(){
+
             this.$http.get("/getArrangeClass",{
                 workNumber:userInfo.workNumber
             })
                 .then(function () {
 
                 }).catch(function () {
-
             })
         },
         detail(dayIndex,itemIndex){
-
+            alert(2);
+            this.$router.push({path:"/detail"});
         }
     }
 }

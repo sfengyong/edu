@@ -19,6 +19,7 @@
 </template>
 <script>
     import { mapActions,mapGetters } from 'vuex'
+    import axios from 'axios'
 
     export default {
         name: 'login',
@@ -44,8 +45,11 @@
         methods:{
             ...mapActions([
                 'login',
-                'getUserInfo'
+                'getTeacherInfo'
             ]),
+            test(){
+              alert(2)
+            },
             Login:function(){
                 var _this = this;
                 new Promise(function (resolve,reject) {
@@ -58,7 +62,7 @@
                     else
                         reject()
                 }).then(function (token) {
-                        _this.getUserInfo(token);
+                        _this.getTeacherInfo(token);
                     },function () {
                         console.log("token is null")
                     })
