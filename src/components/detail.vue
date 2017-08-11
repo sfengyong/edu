@@ -6,17 +6,48 @@
             </router-link>
             <mt-button icon="more" slot="right"></mt-button>
         </mt-header>
+        <div class="courseName">初二语文</div>
         <div class="courseDetail">
-            <mt-field label="日期" v-model="username"></mt-field>
-            <mt-field label="上课时间" type="email" v-model="email" disabled></mt-field>
-            <mt-field label="学生" placeholder="请输入手机号" type="tel" v-model="phone"></mt-field>
-            <mt-field label="老师" placeholder="请输入网址" type="url" v-model="website"></mt-field>
-            <mt-field label="课程状态" placeholder="请输入数字" type="number" v-model="number"></mt-field>
-            <mt-field label="计划课时" placeholder="请输入生日" type="date" v-model="birthday"></mt-field>
-            <mt-field label="实际课时" placeholder="自我介绍" type="textarea" rows="4" v-modal="introduction"></mt-field>
-            <mt-field label="审批备注" placeholder="自我介绍" type="textarea" rows="4" v-modal="introduction"></mt-field>、
-            <mt-field label="拍照取证" placeholder="自我介绍" type="textarea" rows="4" v-modal="introduction"></mt-field>
-            <mt-field label="微信回访取证" placeholder="自我介绍" type="textarea" rows="4" v-modal="introduction"></mt-field>
+            <el-row>
+                <el-col :span="6">日期</el-col>
+                <el-col :span="18"></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="6">上课时间</el-col>
+                <el-col :span="18"></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="6">学生</el-col>
+                <el-col :span="18"></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="6">老师</el-col>
+                <el-col :span="18"></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="6">课程状态</el-col>
+                <el-col :span="18"></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="6">计划课时</el-col>
+                <el-col :span="18"></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="6">实际课时</el-col>
+                <el-col :span="18"></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="6">备注</el-col>
+                <el-col :span="18"></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="6">拍照取证</el-col>
+                <el-col :span="18"></el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="6">微信回访</el-col>
+                <el-col :span="18"></el-col>
+            </el-row>
         </div>
     </div>
 </template>
@@ -24,5 +55,23 @@
 
 </script>
 <style lang="scss" rel="stylesheet/scss">
+#detail{
+    width: 100%;
+    min-height: 100%;
+    .courseName{
+        width: 100%;
+        font-size: 1.9rem;
+        box-sizing: border-box;
+        padding: 0.4rem;
+    }
+    .courseDetail{
+        .el-row{
+            .el-col{
+                font-size:2rem;
 
+            }
+        }
+    }
+
+}
 </style>
