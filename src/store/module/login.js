@@ -17,7 +17,6 @@ const mutations = {
         state.token = token;
         state.login = true;
         state.logout = false;
-        console.log("set token");
         saveToStorage("token",token);
     },
 

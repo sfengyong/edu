@@ -24,7 +24,7 @@ const actions = {
                 token:token
             },
             response =>{
-                commit( TEACHERINFO , response.data);
+                commit(TEACHERINFO,response.data);
             },
             error =>{
                 console.log(error);
@@ -33,8 +33,10 @@ const actions = {
     },
     getTeacher:( {commit }) =>{
         const teacherInfo = getFromStorage("teacherInfo");
-        if(teacherInfo)
+        if(teacherInfo){
             commit(TEACHERINFO,JSON.parse(teacherInfo));
+        }
+
     }
 }
 

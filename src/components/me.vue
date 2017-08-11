@@ -8,7 +8,7 @@
                 <img src="../image/loginbackground.jpg" alt="">
                 <span class="edit">编辑</span>
             </div>
-            <div class="name">{{userInfo.name}}</div>
+            <div class="name">{{teacherInfo.name}}</div>
             <div class="position">主职位：教师</div>
         </div>
         <el-row>
@@ -42,7 +42,7 @@ export default{
     name:'me',
     computed:{
         ...mapGetters({
-            userInfo:'userInfo'
+            teacherInfo:'teacherInfo'
         })
     }
 }

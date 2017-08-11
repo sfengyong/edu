@@ -5,13 +5,13 @@ import Vue from  'vue'
 import Vuex from 'vuex'
 import * as getters from "./getters"
 import login from "./module/login"
-import userInfo from "./module/teacherInfo"
+import teacherInfo from "./module/teacherInfo"
 
 Vue.use(Vuex)
 export default new Vuex.Store({
     getters,
     modules:{
         login,
-        userInfo
+        teacherInfo
     }
 })

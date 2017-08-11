@@ -68,7 +68,7 @@ export default{
     },
     computed:{
         ...mapGetters({
-            userInfo:'userInfo'
+            teacherInfo:'teacherInfo'
 
         })
     },
@@ -127,7 +127,7 @@ export default{
         showClass(){
 
             this.$http.get("/getArrangeClass",{
-                workNumber:userInfo.workNumber
+                workNumber:teacherInfo.workNumber
             })
                 .then(function () {
 
@@ -135,7 +135,6 @@ export default{
             })
         },
         detail(dayIndex,itemIndex){
-            alert(2);
             this.$router.push({path:"/detail"});
         }
     }

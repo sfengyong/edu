@@ -47,9 +47,6 @@
                 'login',
                 'getTeacherInfo'
             ]),
-            test(){
-              alert(2)
-            },
             Login:function(){
                 var _this = this;
                 new Promise(function (resolve,reject) {
@@ -63,6 +60,7 @@
                         reject()
                 }).then(function (token) {
                         _this.getTeacherInfo(token);
+                        _this.$router.push({path:"/main"});
                     },function () {
                         console.log("token is null")
                     })

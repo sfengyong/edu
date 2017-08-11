@@ -51,13 +51,10 @@ router.beforeEach(( to, from ,next ) =>{
     store.dispatch('getToken');
     if( to.meta.requireLogin ){
         const login = store.getters.login;
-        const teacherInfo = store.getters.teacherInfo;
         if(login){
-            if(!teacherInfo)
-                store.dispatch('getTeacher');
+               store.dispatch('getTeacher');
             next();
         }
-
         else
             next({
                 path:"/login"
