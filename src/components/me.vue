@@ -38,14 +38,14 @@
 </template>
 <script>
     import { mapGetters,mapActions } from 'vuex'
-export default{
-    name:'me',
-    computed:{
-        ...mapGetters({
-            teacherInfo:'teacherInfo'
-        })
+    export default{
+        name:'me',
+        computed:{
+            ...mapGetters({
+                teacherInfo:'teacherInfo'
+            })
+        }
     }
-}
 </script>
 <style lang="scss" rel="stylesheet/scss">
 #me{

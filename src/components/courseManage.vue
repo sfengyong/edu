@@ -58,12 +58,13 @@
 </template>
 <script>
     import { mapGetters } from 'vuex'
+    import { _get } from "../api/axios.js"
 export default{
     name:'courseManage',
     data(){
         return{
             header:"",
-            sevenDay:[[{time:'',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}],[{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'},{time:'8:00',courseName:'化学'}]]
+            sevenDay:[[{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{}]]
         }
     },
     computed:{
@@ -74,6 +75,13 @@ export default{
     },
     created(){
         this.showHeader();
+    },
+    mounted(){
+        _get("http://127.0.0.1:3000/getArrangeClass",{workNumber:this.teacherInfo.workNumber},function(data){
+            console.log()
+        },function(){
+
+        })
     },
     methods:{
         showHeader(){

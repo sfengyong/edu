@@ -45,6 +45,7 @@
     </div>
 </template>
 <script>
+
 export default{
     name:'detail',
     data() {
@@ -61,6 +62,12 @@ export default{
             ],
             realCourseTime:''
         }
+    },
+    computed:{
+
+    },
+    mounted(){
+        
     },
     methods:{
          onValuesChange(picker,values){
