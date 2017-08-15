@@ -41,7 +41,7 @@
         </el-row>
         <el-row class="tableWrap">
             <el-col :span="3">
-                <el-row v-for="item in 9">
+                <el-row v-for="item in 7">
                     <el-col :span="24"  class="table index">{{item}}</el-col>
                 </el-row>
             </el-col>
@@ -64,7 +64,7 @@ export default{
     data(){
         return{
             header:"",
-            sevenDay:[[{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{}],[{},{},{},{},{},{},{},{},{}]]
+            sevenDay:[[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}]]
         }
     },
     computed:{
@@ -77,14 +77,16 @@ export default{
         this.showHeader();
     },
     mounted(){
+        var _this = this;
         _get("http://127.0.0.1:3000/getArrangeClass",{workNumber:this.teacherInfo.workNumber},function(data){
-            console.log()
+            _this.dataConversion(data.data);
         },function(){
 
         })
     },
     methods:{
         showHeader(){
+            //处理头部日期显示
             var today = new Date();
             this.header = new Object();
             this.header.date = new Array();
@@ -144,6 +146,48 @@ export default{
         },
         detail(dayIndex,itemIndex){
             this.$router.push({path:"/detail"});
+        },
+        dataConversion(data){
+            for( var i = 0 ; i < data.length ; i++ ){
+                var date = new Date(data[i].startTime);
+                data[i].studentName = data[i].sno;
+                data[i].courseName = data[i].courseNo;
+                data[i].date = date.getMonth() + 1 + '月' + date.getDate() + '日';//某月某日
+                data[i].day = date.getDate();//具体日期
+                data[i].startTime = date.getHours().toString() + date.getMinutes().toString();
+            }
+            this.fillTable(data);
+        },
+        fillTable(data){
+            for( var i = 0 ; i < data.length ; i++ ){
+
+                var index = this.header.date.indexOf(data[i].day);//判断当前读取的记录对应着表头哪一列
+
+                if(index == -1 && data[i].day == 1){
+                    var index = this.header.date.indexOf(this.header.month+1+'月');
+                }
+                if(index != -1){
+                    this.judgmentTime(index,data[i]);
+                }
+            }
+        },
+        judgmentTime(index,data){     //判断每节课的开始时间，以确定它填在某一列的哪一行
+            var time = data.startTime.slice(0,2) - 0;
+            if( time >= 8 && time < 10){
+                
+            }else if( time >= 10 && time < 12 ){
+                
+            }else if( time >= 12 && time < 14 ){
+                
+            }else if( time >= 14 && time < 16 ){
+                
+            }else if( time >= 16 && time < 18 ){
+                
+            }else if( time >= 18 && time < 20 ){
+                
+            }else if( time >= 20 ){
+                
+            }
         }
     }
 }
