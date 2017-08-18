@@ -47,24 +47,29 @@
             </el-col>
             <el-col :span="3"v-for="(day,dayIndex) in sevenDay">
                 <el-row v-for="(item,itemIndex) in day">
-                    <el-col :span="24"  class="table">
-                        <div @click="detail(dayIndex,itemIndex)">{{item.time}}</div>
-                        <div @click="detail(dayIndex,itemIndex)">{{item.courseName}}</div>
+                    <el-col :span="24"  class="table" @click.native="transferData(item)">
+                        <div >{{item.startTime}}</div>
+                        <div >{{item.courseName}}</div>
                     </el-col>
                 </el-row>
             </el-col>
         </el-row>
+        <detail :info="info" :detailShow.sync='detailShow' v-show='detailShow'></detail>
     </div>
 </template>
 <script>
     import { mapGetters } from 'vuex'
     import { _get } from "../api/axios.js"
+    import detail from "./detail.vue"
 export default{
     name:'courseManage',
     data(){
         return{
             header:"",
-            sevenDay:[[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}]]
+            //sevenDay:[[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}]]
+            sevenDay:[[],[],[],[],[],[],[]],
+            info:"",
+            detailShow:false
         }
     },
     computed:{
@@ -72,6 +77,9 @@ export default{
             teacherInfo:'teacherInfo'
 
         })
+    },
+    components:{
+        detail:detail
     },
     created(){
         this.showHeader();
@@ -82,7 +90,7 @@ export default{
             _this.dataConversion(data.data);
         },function(){
 
-        })
+        });
     },
     methods:{
         showHeader(){
@@ -172,28 +180,38 @@ export default{
             }
         },
         judgmentTime(index,data){     //判断每节课的开始时间，以确定它填在某一列的哪一行
-            var time = data.startTime.slice(0,2) - 0;
+
+            this.sevenDay[index].push(data);
+
+            /* var time = data.startTime.slice(0,2) - 0;
             if( time >= 8 && time < 10){
-                
+                this.sevenDay[index][0] = data;
             }else if( time >= 10 && time < 12 ){
-                
+                this.sevenDay[index][1] = data;
             }else if( time >= 12 && time < 14 ){
-                
+                this.sevenDay[index][2] = data;
             }else if( time >= 14 && time < 16 ){
-                
+                this.sevenDay[index][3] = data;
             }else if( time >= 16 && time < 18 ){
-                
+                this.sevenDay[index][4] = data;
             }else if( time >= 18 && time < 20 ){
-                
+                this.sevenDay[index][5] = data;
             }else if( time >= 20 ){
-                
-            }
+                this.sevenDay[index][6] = data;
+            } */
+        },
+        transferData(item){
+            this.info = item;
+            this.detailShow = true;
         }
     }
 }
 </script>
 <style lang="scss" rel="stylesheet/scss">
 #courseManage{
+    position: relative;
+    width: 100%;
+    height: 100%;
     .tableHeader {
         top: 3.3rem;
         right: 0;
@@ -235,6 +253,5 @@ export default{
             background: #f3f3f6;
         }
     }
-
 }
 </style>

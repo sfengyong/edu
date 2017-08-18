@@ -33,13 +33,13 @@ const router = new Router({
                 requireLogin: true
             }
         },
-        {
+        /* {
             path:"/detail",
             component:detail,
             meta:{
                 requireLogin:true
             }
-        },
+        }, */
         {
             path:'*',
             redirect:'/login'
