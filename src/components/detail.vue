@@ -9,7 +9,7 @@
         <div class="courseName" >初二语文</div>
         <div class="courseDetail">
             <mt-field label="日期" type="text" disabled rows="1" v-model="info.date" ></mt-field>
-            <mt-field label="上课时间" type="text" disabled rows="1" v-model="info.startTime"></mt-field>
+            <mt-field label="上课时间" type="text" disabled rows="1" v-model="info.start"></mt-field>
             <mt-field label="学生" type="text" disabled rows="1" v-model="info.studentName"></mt-field>
             <mt-field label="老师" type="text" disabled rows="1" v-model="teacherInfo.name"></mt-field>
             <mt-field label="状态" type="text" disabled rows="1" v-model="status" ></mt-field>
@@ -32,18 +32,18 @@
                     <span class="actualClass">{{realCourseTime}}</span>
                 </el-col>
             </el-row>
-            <mt-field label="备注" placeholder="备注内容" type="text"  rows="1" ></mt-field>
+            <mt-field label="备注" placeholder="备注内容" type="text"  rows="1" v-model="remark"></mt-field>
             <el-row>
                 <el-col :span="6">拍照取证</el-col>
                 <el-col :offset="13" :span="5">
                     <el-upload
                         ref="photoEvidence"
                         class="avatar-uploader"
-                        action="http://127.0.0.1:3000/photoEvidence"
+                        action="http://127.0.0.1:3000/photo/photoEvidence"
                         :multiple = 'false'
                         :auto-upload='false'
                         :show-file-list="false"
-                        :on-success = 'uploadSuccess'
+                        :on-success = "setPhotoEvidencePath"
                         :on-error = 'uploadError'
                         :on-change="showPhotoEvidence"
                         :before-upload="beforeAvatarUpload">
@@ -58,11 +58,11 @@
                     <el-upload
                         ref="returnVisit"
                         class="avatar-uploader"
-                        action="http://127.0.0.1:3000/returnVisit"
+                        action="http://127.0.0.1:3000/photo/returnVisit"
                         :multiple = 'false'
                         :auto-upload='false'
                         :show-file-list="false"
-                        :on-success = 'uploadSuccess'
+                        :on-success = "setReturnVisitPath"
                         :on-error = 'uploadError'
                         :on-change="showReturnVisit"
                         :before-upload="beforeAvatarUpload">
@@ -71,13 +71,14 @@
                   </el-upload>
                 </el-col>
             </el-row>
-            <mt-button  class='commit' type="primary" @click="commit()">default</mt-button>
+            <mt-button  class='commit' type="primary" @click="commit()">提交</mt-button>
         </div>
     </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 import { _post } from '../api/axios'
+import { Toast } from 'mint-ui'
 export default{
     props:["info","detailShow"],
     name:'detail',
@@ -94,13 +95,12 @@ export default{
                 }
             ],
             realCourseTime:'',
+            remark:"",//备注
             status:"未审核",
             photoEvidenceUrl:"",
-            photoEvidencePath:"",
+            photoEvidencePath:"",//拍照取证地址路径
             returnVisitUrl:"",
-            returnVisitPath:"",
-            uploadStatus:false
-           
+            returnVisitPath:""  //微信回访取证路径
         }
     },
     computed:{
@@ -132,41 +132,76 @@ export default{
         },
         beforeAvatarUpload(file) {
         },
-        uploadSuccess(response,file,fileList){
-            this.uploadStatus = true;
-            return response;
+        setPhotoEvidencePath(response,file,fileList){
+            this.photoEvidencePath = response;
+            this.$refs.returnVisit.submit();
+        },
+        setReturnVisitPath(response,file,fileList){
+            this.returnVisitPath = response;
+            var data = {
+                workNumber:this.info.workNumber,
+                sno:this.info.sno,
+                courseNo:this.info.courseNo,
+                startTime:this.info.startTime,
+                endTime:this.info.endTime,
+                courseNumber:this.info.courseNumber,
+                courseHour:this.info.courseHour,
+                realCourseTime:this.realCourseTime,//实际课时
+                remark:this.remark,
+                photoEvidencePath:this.photoEvidencePath,
+                returnVisitPath:this.returnVisitPath
+
+            };
+            _post(
+                "http://127.0.0.1:3000/audit",
+                data,
+                function(res){
+                    if(res.data == 'successful'){
+                        _this.status = '审核中';
+                        Toast({
+                            message: '提交成功',
+                            iconClass: 'icon-xiaolian iconfont',
+                            duration:1000
+                        });
+                        setTimeout(function(){
+                            _this.$emit('update:detailShow', false);
+                        },1000)    
+                    }else{
+                        console.log(res)
+                        Toast({
+                            message: '提交失败',
+                            iconClass: 'icon-xiaolian iconfont',
+                            duration:1000
+                        });
+                    }
+                    
+                },
+                function(){
+                    Toast({
+                        message: '提交失败',
+                        iconClass: 'icon-xiaolian iconfont',
+                        duration:1000
+                    });
+                }
+            )
         },
         uploadError(err,file,fileList){
-            this.uploadStatus = false;
+            Toast({
+                message: '提交成功',
+                iconClass: 'icon-xiaolian iconfont',
+                duration:1000
+            });
         },
         commit(){
-            new Promise(function(resolve,reject){
-                this.$refs.photoEvidence.submit();
-                resolve();
-            })
-            .then(function(){
-                if(this.uploadStatus){
-                    return new Promise(function(resolve,reject){
-                        this.$refs.returnVisit.submit();
-                        resolve();
-                    })
-                }
-            },function(){})
-            .then(function(){
-                if(this.uploadStatus){
-                    _post(
-                        "http://127.0.0.1:3000/audit",
-                        data:,
-                        function(){},
-                        function(){}
-                    )
-                }
-            },function(){})
+            this.$refs.photoEvidence.submit();
         }
     }
 }
 </script>
 <style lang="scss" rel="stylesheet/scss">
+.icon{
+    content:"&#xe60b"
+}
 #detail{
     top: 0;left: 0;
     position: absolute;

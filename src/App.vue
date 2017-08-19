@@ -15,14 +15,14 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-    @font-face {
-        font-family: 'iconfont';  /* project id 368210 */
-        src: url('http://at.alicdn.com/t/font_qahlyhqre3f03sor.eot');
-        src: url('http://at.alicdn.com/t/font_qahlyhqre3f03sor.eot?#iefix') format('embedded-opentype'),
-        url('http://at.alicdn.com/t/font_qahlyhqre3f03sor.woff') format('woff'),
-        url('http://at.alicdn.com/t/font_qahlyhqre3f03sor.ttf') format('truetype'),
-        url('http://at.alicdn.com/t/font_qahlyhqre3f03sor.svg#iconfont') format('svg');
-    }
+  @font-face {
+    font-family: 'iconfont';  /* project id 368210 */
+    src: url('http://at.alicdn.com/t/font_368210_fjzg61gt6e7e3ik9.eot');
+    src: url('http://at.alicdn.com/t/font_368210_fjzg61gt6e7e3ik9.eot?#iefix') format('embedded-opentype'),
+    url('http://at.alicdn.com/t/font_368210_fjzg61gt6e7e3ik9.woff') format('woff'),
+    url('http://at.alicdn.com/t/font_368210_fjzg61gt6e7e3ik9.ttf') format('truetype'),
+    url('http://at.alicdn.com/t/font_368210_fjzg61gt6e7e3ik9.svg#iconfont') format('svg');
+  }
   .iconfont{
     font-family: iconfont;
     font-style: normal;

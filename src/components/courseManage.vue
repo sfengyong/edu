@@ -48,7 +48,7 @@
             <el-col :span="3"v-for="(day,dayIndex) in sevenDay">
                 <el-row v-for="(item,itemIndex) in day">
                     <el-col :span="24"  class="table" @click.native="transferData(item)">
-                        <div >{{item.startTime}}</div>
+                        <div >{{item.start}}</div>
                         <div >{{item.courseName}}</div>
                     </el-col>
                 </el-row>
@@ -156,15 +156,15 @@ export default{
             this.$router.push({path:"/detail"});
         },
         dataConversion(data){
-            for( var i = 0 ; i < data.length ; i++ ){
-                var date = new Date(data[i].startTime);
-                data[i].studentName = data[i].sno;
-                data[i].courseName = data[i].courseNo;
-                data[i].date = date.getMonth() + 1 + '月' + date.getDate() + '日';//某月某日
-                data[i].day = date.getDate();//具体日期
-                data[i].startTime = date.getHours().toString() + date.getMinutes().toString();
+            for( var i = 0 ; i < data.result.length ; i++ ){
+                var date = new Date(data.result[i].startTime);
+                data.result[i].studentName = data.studentName[i];
+                data.result[i].courseName = data.courseName[i];
+                data.result[i].date = date.getMonth() + 1 + '月' + date.getDate() + '日';//某月某日
+                data.result[i].day = date.getDate();//具体日期
+                data.result[i].start = date.getHours().toString() + date.getMinutes().toString();
             }
-            this.fillTable(data);
+            this.fillTable(data.result);
         },
         fillTable(data){
             for( var i = 0 ; i < data.length ; i++ ){
@@ -180,25 +180,7 @@ export default{
             }
         },
         judgmentTime(index,data){     //判断每节课的开始时间，以确定它填在某一列的哪一行
-
             this.sevenDay[index].push(data);
-
-            /* var time = data.startTime.slice(0,2) - 0;
-            if( time >= 8 && time < 10){
-                this.sevenDay[index][0] = data;
-            }else if( time >= 10 && time < 12 ){
-                this.sevenDay[index][1] = data;
-            }else if( time >= 12 && time < 14 ){
-                this.sevenDay[index][2] = data;
-            }else if( time >= 14 && time < 16 ){
-                this.sevenDay[index][3] = data;
-            }else if( time >= 16 && time < 18 ){
-                this.sevenDay[index][4] = data;
-            }else if( time >= 18 && time < 20 ){
-                this.sevenDay[index][5] = data;
-            }else if( time >= 20 ){
-                this.sevenDay[index][6] = data;
-            } */
         },
         transferData(item){
             this.info = item;

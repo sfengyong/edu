@@ -5,7 +5,6 @@ import { Row, Col,Input,Button ,Table, TableColumn, Upload,} from 'element-ui'
 import router from './routers/routers'
 /*import axios from "axios"*/
 
-
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import store from "./store"
