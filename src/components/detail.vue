@@ -137,6 +137,7 @@ export default{
             this.$refs.returnVisit.submit();
         },
         setReturnVisitPath(response,file,fileList){
+            var _this = this;
             this.returnVisitPath = response;
             var data = {
                 workNumber:this.info.workNumber,
@@ -156,18 +157,17 @@ export default{
                 "http://127.0.0.1:3000/audit",
                 data,
                 function(res){
-                    if(res.data == 'successful'){
+                   if(res.data == 'successful'){
                         _this.status = '审核中';
-                        Toast({
+                       Toast({
                             message: '提交成功',
                             iconClass: 'icon-xiaolian iconfont',
                             duration:1000
                         });
                         setTimeout(function(){
                             _this.$emit('update:detailShow', false);
-                        },1000)    
+                        },1000)
                     }else{
-                        console.log(res)
                         Toast({
                             message: '提交失败',
                             iconClass: 'icon-xiaolian iconfont',
@@ -193,6 +193,14 @@ export default{
             });
         },
         commit(){
+            if(!this.realCourseTime){
+                Toast({
+                    message: '请完善信息',
+                    iconClass: 'icon-xiaolian iconfont',
+                    duration:1000
+                });
+                return;
+            }
             this.$refs.photoEvidence.submit();
         }
     }

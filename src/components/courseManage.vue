@@ -143,7 +143,6 @@ export default{
             return monthDay;
         },
         showClass(){
-
             this.$http.get("/getArrangeClass",{
                 workNumber:teacherInfo.workNumber
             })
