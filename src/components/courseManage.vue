@@ -155,15 +155,15 @@ export default{
             this.$router.push({path:"/detail"});
         },
         dataConversion(data){
-            for( var i = 0 ; i < data.result.length ; i++ ){
-                var date = new Date(data.result[i].startTime);
-                data.result[i].studentName = data.studentName[i];
-                data.result[i].courseName = data.courseName[i];
-                data.result[i].date = date.getMonth() + 1 + '月' + date.getDate() + '日';//某月某日
-                data.result[i].day = date.getDate();//具体日期
-                data.result[i].start = date.getHours().toString() + date.getMinutes().toString();
+            for( var i = 0 ; i < data.length ; i++ ){
+                var date = new Date(data[i].startTime);
+/*                 data[i].studentName = data.studentName[i];
+                data[i].courseName = data.courseName[i]; */
+                data[i].date = date.getMonth() + 1 + '月' + date.getDate() + '日';//某月某日
+                data[i].day = date.getDate();//具体日期
+                data[i].start = date.getHours().toString() + date.getMinutes().toString();
             }
-            this.fillTable(data.result);
+            this.fillTable(data);
         },
         fillTable(data){
             for( var i = 0 ; i < data.length ; i++ ){
