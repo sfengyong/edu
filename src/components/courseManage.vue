@@ -41,20 +41,23 @@
         </el-row>
         <el-row class="tableWrap">
             <el-col :span="3">
-                <el-row v-for="item in 7">
+                <el-row v-for="item in 6">
                     <el-col :span="24"  class="table index">{{item}}</el-col>
                 </el-row>
             </el-col>
             <el-col :span="3"v-for="(day,dayIndex) in sevenDay">
                 <el-row v-for="(item,itemIndex) in day">
-                    <el-col :span="24"  class="table" @click.native="transferData(item)">
-                        <div >{{item.start}}</div>
+                    <el-col :span="24"  class="table color" @click.native="transferData(item)" :class="[colorClass[item.status]]">
+                        <div >{{item.start | time }}</div>
                         <div >{{item.courseName}}</div>
                     </el-col>
                 </el-row>
             </el-col>
         </el-row>
-        <detail :info="info" :detailShow.sync='detailShow' v-show='detailShow'></detail>
+        <transition name="show">
+            <detail :info="info" :detailShow.sync='detailShow' v-show='detailShow'></detail>
+        </transition>
+        
     </div>
 </template>
 <script>
@@ -69,7 +72,13 @@ export default{
             //sevenDay:[[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}]]
             sevenDay:[[],[],[],[],[],[],[]],
             info:"",
-            detailShow:false
+            detailShow:false,
+            colorClass:{
+                '未审核':"noAudit",
+                "审核中":"reviewing",
+                "已审核":"success",
+                "未通过":"danger"
+            }
         }
     },
     computed:{
@@ -77,6 +86,11 @@ export default{
             teacherInfo:'teacherInfo'
 
         })
+    },
+    filters:{
+        time:function(value){
+            return value.slice(0,2) + ":" + value.slice(2);
+        }
     },
     components:{
         detail:detail
@@ -157,8 +171,6 @@ export default{
         dataConversion(data){
             for( var i = 0 ; i < data.length ; i++ ){
                 var date = new Date(data[i].startTime);
-/*                 data[i].studentName = data.studentName[i];
-                data[i].courseName = data.courseName[i]; */
                 data[i].date = date.getMonth() + 1 + '月' + date.getDate() + '日';//某月某日
                 data[i].day = date.getDate();//具体日期
                 data[i].start = date.getHours().toString() + date.getMinutes().toString();
@@ -233,6 +245,47 @@ export default{
             padding-top: 2.2rem;
             background: #f3f3f6;
         }
+        .color{
+            transform: scale(0)
+        }
+        .noAudit{
+            background: #50bfff;
+            animation: show 0.3s linear;
+            animation-fill-mode:forwards
+        }
+        .reviewing{
+            background:#f7ba2a ;
+            animation: show 0.3s linear;
+            animation-delay: .3s;
+            animation-fill-mode: forwards;
+        }
+        .danger{
+            background: red;
+            animation: show 0.3s linear;
+            animation-delay: .4s;
+            animation-fill-mode: forwards;
+        }
+        .success{
+            background: #13ce66;
+            animation: show 0.3s linear;
+            animation-delay: .5s;
+            animation-fill-mode: forwards;
+        }
+        @keyframes show {
+            from{
+                transform: scale(0);
+            }
+            to{
+                transform: scale(1);
+            }
+        }
+    }
+    .show-enter-active,.show-leave-active{
+        transition: opacity .4s ease-in , transform .4s ease-in;
+    }
+    .show-enter,.show-leave-active{
+        opacity: 0;
+        transform: scale(0);
     }
 }
 </style>

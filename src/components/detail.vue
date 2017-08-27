@@ -1,22 +1,45 @@
 <template>
     <div id="detail">
         <mt-header title="课程详情">
-            <router-link to="/courseManage" slot="left" @click.native="close()">
+            <router-link to="/courseManage" slot="left" @click.native="closeDetail()">
                 <mt-button icon="back">返回</mt-button>
             </router-link>
             <mt-button icon="more" slot="right"></mt-button>
         </mt-header>
         <div class="courseName" >初二语文</div>
         <div class="courseDetail">
-            <mt-field label="日期" type="text" disabled rows="1" v-model="info.date" ></mt-field>
-            <mt-field label="上课时间" type="text" disabled rows="1" v-model="info.start"></mt-field>
-            <mt-field label="学生" type="text" disabled rows="1" v-model="info.studentName"></mt-field>
-            <mt-field label="老师" type="text" disabled rows="1" v-model="teacherInfo.name"></mt-field>
-            <mt-field label="状态" type="text" disabled rows="1" v-model="status" ></mt-field>
-            <mt-field label="计划课时" type="text" disabled rows="1" v-model="info.courseHour"></mt-field>
-            <el-row @click.native="popupVisible=true">
-                <el-col :span="6">实际课时</el-col>
-                <el-col :span="18" >
+            <div class="item">
+                <span class="infoTitle">日期</span><!-- 
+             --><span class="infoContent">{{info.date}}</span>
+            </div>
+            <div class="item">
+                <span class="infoTitle">上课时间</span><!-- 
+             --><span class="infoContent">{{info.start}}</span>
+            </div>
+            <div class="item">
+                <span class="infoTitle">学生</span><!-- 
+             --><span class="infoContent">{{info.studentName}}</span>
+            </div>
+            <div class="item">
+                <span class="infoTitle">老师</span><!-- 
+             --><span class="infoContent">{{teacherInfo.name}}</span>
+            </div>
+            <div class="item">
+                <span class="infoTitle">状态</span><!-- 
+             --><span class="infoContent">{{info.status}}</span>
+            </div>
+            <div class="item" v-if="info.reason">
+                <span class="infoTitle">原因</span><!-- 
+             --><span class="infoContent">{{info.reason}}</span>
+            </div>
+            <div class="item">
+                <span class="infoTitle">计划课时</span><!-- 
+             --><span class="infoContent">{{info.courseHour}}</span>
+            </div>
+            <div class="item" @click="popupVisible=true">
+                <span class="infoTitle">实际课时</span><!-- 
+             --><span class="infoContent">{{realCourseTime}}</span>
+                <transition name="show">
                     <mt-popup
                         v-model="popupVisible"
                         popup-transition="popup-fade"
@@ -24,15 +47,17 @@
                             <mt-picker :slots="slots" :showToolbar='true' :visibleItemCount='3'  @change="onValuesChange"> 
                                 <span>请选择课时</span>
                             </mt-picker>
-                            <el-row>
-                                <el-col :span="12"><mt-button type="default" @click.stop='cancel()'>取消</mt-button></el-col>
-                                <el-col :span="12"><mt-button type="primary" @click.stop='confirm()'>确认</mt-button></el-col>
-                            </el-row>
+                            <div>
+                                <mt-button type="default" @click.stop='cancel()'>取消</mt-button><!-- 
+                            --><mt-button type="primary" @click.stop='confirm()'>确认</mt-button>
+                            </div>
                     </mt-popup>
-                    <span class="actualClass">{{realCourseTime}}</span>
-                </el-col>
-            </el-row>
-            <mt-field label="备注" placeholder="备注内容" type="text"  rows="1" v-model="remark"></mt-field>
+                </transition>
+            </div>
+            <div class="item">
+                <span class="infoTitle">备注</span><!-- 
+             --><span class="infoContent"><input type="text" v-model="remark" placeholder="备注内容"></span>
+            </div>
             <el-row>
                 <el-col :span="6">拍照取证</el-col>
                 <el-col :offset="13" :span="5">
@@ -53,7 +78,7 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="6">微信回访</el-col>
+                <el-col :span="6">{{returnWay}}</el-col>
                 <el-col :offset="13" :span="5">
                     <el-upload
                         ref="returnVisit"
@@ -77,7 +102,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { _post } from '../api/axios'
+import { _post , _get } from '../api/axios'
 import { Toast } from 'mint-ui'
 export default{
     props:["info","detailShow"],
@@ -94,9 +119,9 @@ export default{
                     textAlign: 'center'
                 }
             ],
+            returnWay:"",           //回访方式，为同一个学生每上三次课要求老师进行电话回访取代微信回访
             realCourseTime:'',
             remark:"",//备注
-            status:"未审核",
             photoEvidenceUrl:"",
             photoEvidencePath:"",//拍照取证地址路径
             returnVisitUrl:"",
@@ -107,6 +132,53 @@ export default{
         ...mapGetters({
             teacherInfo:'teacherInfo'
         })
+    },
+    filters:{
+        time:function(value){
+            return value.slice(0,2) + ":" + value.slice(2);
+        }
+    },
+    watch:{
+        detailShow:function(newValue,oldValue){
+            var _this = this;
+            if(newValue){
+                _get(
+                    "http://127.0.0.1:3000/getClassCount",
+                    {
+                        workNumber:this.teacherInfo.workNumber,
+                        sno:this.info.sno
+                    },
+                    function(response){
+                        if(typeof response.data.count == 'number'){
+                            if( (response.data.count+1) % 3 == 0 ){
+                                _this.returnWay = "电话回访";
+                            }else{
+                                _this.returnWay = "微信回访";
+                            }
+                        }else{
+                            Toast({
+                                message:"未知错误，请重试",
+                                position:"bottom",
+                                duration:1000
+                            });
+                            setTimeout(function(){
+                                _this.$emit('update:detailShow', false);
+                            },1000);
+                        }                
+                    },
+                    function(error){
+                        console.log(error);
+                        Toast({
+                            message:"未知错误，请重试",
+                            position:"bottom",
+                            duration:1000
+                        });
+                        setTimeout(function(){
+                            _this.$emit('update:detailShow', false);
+                        },1000);
+                    });
+            }
+        }
     },
     methods:{
         onValuesChange(picker,values){
@@ -121,7 +193,7 @@ export default{
             this.realCourseTime=1.5;
             this.popupVisible=false;
         },
-        close(){
+        closeDetail(){
             this.$emit('update:detailShow', false);
         },
         showPhotoEvidence(file) {
@@ -185,7 +257,7 @@ export default{
                 }
             )
         },
-        uploadError(err,file,fileList){
+        uploadError(err,file,fileList){ 
             Toast({
                 message: '提交成功',
                 iconClass: 'icon-xiaolian iconfont',
@@ -207,9 +279,6 @@ export default{
 }
 </script>
 <style lang="scss" rel="stylesheet/scss">
-.icon{
-    content:"&#xe60b"
-}
 #detail{
     top: 0;left: 0;
     position: absolute;
@@ -224,6 +293,51 @@ export default{
         padding: 0.4rem;
     }
     .courseDetail{
+        .item{
+            background: white;
+            height: 3.8rem;
+            box-sizing: border-box;
+            padding: 1rem 2.3rem 1rem 1.2rem;
+            border-bottom: 0.1rem rgba(217,217,217,0.43) solid;
+            .infoTitle{
+                display: inline-block;
+                width: 25%;
+                font-size: 1.7rem;
+                color: rgba(0,0,0,0.8);
+            }
+            .infoContent{
+                display: inline-block;
+                width:75%;
+                text-align: right;
+                font-size: 1.7rem;
+                color: rgba(0,0,0,0.8);
+                input{
+                    border: none;
+                    outline: none;
+                    display: inline-block;
+                    width: 100%;
+                    height: 100%;
+                    font-size: 1.7rem;
+                }
+                
+            }
+            .mint-popup{
+                width: 20rem;
+                text-align: center;
+                span{
+                    font-size: 1.8rem;
+                    display: inline-block;
+                    margin-top: 0.5rem;
+                }
+                .mint-button{
+                    display: inline-block;
+                    width: 50%;
+                    border-radius: 0;
+                }
+            }
+            
+        }
+        
         input:disabled{
             background: white;
         }
@@ -231,14 +345,19 @@ export default{
             text-align:right;
             margin-right:1.2rem;
         }
+        .realClass{
+            height: 3.8rem;
+            padding: 1rem 2.3rem 1rem 1.2rem;
+        }
         .el-row{
             background: white;
             box-sizing: border-box;
             padding:1.5rem 1rem;
+            border-bottom:0.1rem solid rgba(217,217,217,0.43);
             .el-col{
                 font-size:1.6rem;
                 .avatar-uploader .el-upload {
-                    border: 1px dashed #d9d9d9;
+                    border: 1px dashed rgba(217,217,217,0.43);
                     border-radius: 6px;
                     cursor: pointer;
                     position: relative;
@@ -263,18 +382,6 @@ export default{
                 }
 
             }
-            .actualClass{
-                float: right;
-                margin-right: 1.2rem;
-            }
-            .mint-popup{
-                width: 20rem;
-                border-radius: 1rem;
-                text-align: center;
-            }
-            .mint-button{
-                width: 100%;
-            }
         }
         .commit{
             display: block;
@@ -283,4 +390,5 @@ export default{
     }
 
 }
+
 </style>
