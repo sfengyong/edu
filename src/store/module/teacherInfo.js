@@ -19,7 +19,7 @@ const mutations = {
 const actions = {
     getTeacherInfo:( { commit } , token) =>{
         _get(
-            "http://127.0.0.1:3000/getTeacherInfo",
+            "http://192.168.232.243:3000/getTeacherInfo",
             {
                 token:token
             },

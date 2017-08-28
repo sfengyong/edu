@@ -57,7 +57,7 @@
         width: 100%;
         box-sizing: border-box;
         padding: 1rem;
-        background: #fafafa;
+        /* background: #fafafa; */
         text-align: center;
         position: relative;
         span{

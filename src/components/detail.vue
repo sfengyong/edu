@@ -64,14 +64,15 @@
                     <el-upload
                         ref="photoEvidence"
                         class="avatar-uploader"
-                        action="http://127.0.0.1:3000/photo/photoEvidence"
+                        action="http://192.168.232.243:3000/photo/photoEvidence"
                         :multiple = 'false'
                         :auto-upload='false'
                         :show-file-list="false"
                         :on-success = "setPhotoEvidencePath"
                         :on-error = 'uploadError'
                         :on-change="showPhotoEvidence"
-                        :before-upload="beforeAvatarUpload">
+                        :before-upload="beforeAvatarUpload"
+                        :http-request="uploadPhotoEvidence">
                     <img v-if="photoEvidenceUrl" :src="photoEvidenceUrl" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                   </el-upload>
@@ -83,14 +84,15 @@
                     <el-upload
                         ref="returnVisit"
                         class="avatar-uploader"
-                        action="http://127.0.0.1:3000/photo/returnVisit"
+                        action="http://192.168.232.243:3000/photo/returnVisit"
                         :multiple = 'false'
                         :auto-upload='false'
                         :show-file-list="false"
                         :on-success = "setReturnVisitPath"
                         :on-error = 'uploadError'
                         :on-change="showReturnVisit"
-                        :before-upload="beforeAvatarUpload">
+                        :before-upload="beforeAvatarUpload"
+                        :http-request="uploadReturnVisit">
                     <img v-if="returnVisitUrl" :src="returnVisitUrl" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                   </el-upload>
@@ -104,6 +106,7 @@
 import { mapGetters } from 'vuex'
 import { _post , _get } from '../api/axios'
 import { Toast } from 'mint-ui'
+import { imageCompression } from "../util/imageCompression"
 export default{
     props:["info","detailShow"],
     name:'detail',
@@ -143,7 +146,7 @@ export default{
             var _this = this;
             if(newValue){
                 _get(
-                    "http://127.0.0.1:3000/getClassCount",
+                    "http://192.168.232.243:3000/getClassCount",
                     {
                         workNumber:this.teacherInfo.workNumber,
                         sno:this.info.sno
@@ -152,6 +155,11 @@ export default{
                         if(typeof response.data.count == 'number'){
                             if( (response.data.count+1) % 3 == 0 ){
                                 _this.returnWay = "电话回访";
+                                Toast({
+                                    message:"这次需要提交电话回访哦~",
+                                    position:"bottom",
+                                    duration:2500
+                                });
                             }else{
                                 _this.returnWay = "微信回访";
                             }
@@ -204,13 +212,43 @@ export default{
         },
         beforeAvatarUpload(file) {
         },
+        uploadPhotoEvidence(file){
+            this.uploadPhoto(file,"photoEvidence")
+        },
+        uploadReturnVisit(file){
+            this.uploadPhoto(file,"returnVisit")
+        },
+        uploadPhoto(file,species){
+            var IMAGE_REG = /\.(.+)/;
+            var _this = this;
+            imageCompression(file.file,function(base64){
+                _post(
+                    "http://192.168.232.243:3000/photo/" + species,
+                    {
+                        base64:base64,
+                        type:file.file.name.match(IMAGE_REG)[1]
+                    },
+                    function(response){
+                        if( species == 'photoEvidence'){
+                            _this.setPhotoEvidencePath(response);
+                        }else if( species == 'returnVisit' ){
+                            _this.setReturnVisitPath(response);
+                        }
+                    },
+                    function(error){
+                        _this.uploadError(error);
+                    }
+                )
+            })
+            
+        },
         setPhotoEvidencePath(response,file,fileList){
-            this.photoEvidencePath = response;
+            this.photoEvidencePath = response.data.name;
             this.$refs.returnVisit.submit();
         },
         setReturnVisitPath(response,file,fileList){
             var _this = this;
-            this.returnVisitPath = response;
+            this.returnVisitPath = response.data.name;
             var data = {
                 workNumber:this.info.workNumber,
                 sno:this.info.sno,
@@ -226,7 +264,7 @@ export default{
 
             };
             _post(
-                "http://127.0.0.1:3000/audit",
+                "http://192.168.232.243:3000/audit",
                 data,
                 function(res){
                    if(res.data == 'successful'){
@@ -295,7 +333,7 @@ export default{
     .courseDetail{
         .item{
             background: white;
-            height: 3.8rem;
+            height: 4.4rem;
             box-sizing: border-box;
             padding: 1rem 2.3rem 1rem 1.2rem;
             border-bottom: 0.1rem rgba(217,217,217,0.43) solid;

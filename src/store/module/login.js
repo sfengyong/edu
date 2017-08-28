@@ -31,7 +31,7 @@ const mutations = {
 const actions = {
     login:( { commit },data ) =>{
         _post(
-            "http://127.0.0.1:3000/teacherLogin",
+            "http://192.168.232.243:3000/teacherLogin",
             data,
             response =>{
                 commit(LOGIN,response.data);
