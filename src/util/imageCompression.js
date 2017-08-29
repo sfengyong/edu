@@ -42,7 +42,7 @@ function compress(img) {
     var height = img.height;
     //如果图片大于四百万像素，计算压缩比并将大小压至400万以下
     var ratio;
-    if ((ratio = width * height / 4000000) > 1) {
+    if ((ratio = width * height / 6500000) > 1) {
         ratio = Math.sqrt(ratio);
         width /= ratio;
         height /= ratio;
@@ -73,7 +73,7 @@ function compress(img) {
         ctx.drawImage(img, 0, 0, width, height);
     }
     //进行最小压缩
-    var ndata = canvas.toDataURL('image/jpeg', 0.1);
+    var ndata = canvas.toDataURL('image/jpeg', 0.6);
     console.log('压缩前：' + initSize);
     console.log('压缩后：' + ndata.length);
     console.log('压缩率：' + ~~(100 * (initSize - ndata.length) / initSize) + "%");

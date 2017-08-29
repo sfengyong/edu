@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-      <router-view></router-view>
+      <transition name="show">
+        <router-view></router-view> 
+      </transition>
   </div>
 </template>
 
@@ -36,9 +38,16 @@ export default {
       height: 100%;
       font-size: 62.5%;
   }
-    #app{
-        width: 100%;
-        height: 100%;
-    }
+  #app{
+      width: 100%;
+      height: 100%;
+  }
+  .show-enter-active,.show-leave-active{
+      transition: opacity .4s ease-in , transform .4s ease-in;
+  }
+  .show-enter,.show-leave-active{
+      opacity: 0;
+      transform: scale(0);
+  }
 
 </style>

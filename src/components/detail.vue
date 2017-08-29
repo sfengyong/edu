@@ -14,7 +14,7 @@
             </div>
             <div class="item">
                 <span class="infoTitle">上课时间</span><!-- 
-             --><span class="infoContent">{{info.start}}</span>
+             --><span class="infoContent">{{info.start|time}}</span>
             </div>
             <div class="item">
                 <span class="infoTitle">学生</span><!-- 
@@ -36,9 +36,9 @@
                 <span class="infoTitle">计划课时</span><!-- 
              --><span class="infoContent">{{info.courseHour}}</span>
             </div>
-            <div class="item" @click="popupVisible=true">
+            <div class="item" @click="showMtPopup()">
                 <span class="infoTitle">实际课时</span><!-- 
-             --><span class="infoContent">{{realCourseTime}}</span>
+             --><span class="infoContent">{{info.realCourseTime}}</span>
                 <transition name="show">
                     <mt-popup
                         v-model="popupVisible"
@@ -71,7 +71,6 @@
                         :on-success = "setPhotoEvidencePath"
                         :on-error = 'uploadError'
                         :on-change="showPhotoEvidence"
-                        :before-upload="beforeAvatarUpload"
                         :http-request="uploadPhotoEvidence">
                     <img v-if="photoEvidenceUrl" :src="photoEvidenceUrl" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -90,15 +89,14 @@
                         :show-file-list="false"
                         :on-success = "setReturnVisitPath"
                         :on-error = 'uploadError'
-                        :on-change="showReturnVisit"
-                        :before-upload="beforeAvatarUpload"
+                        :on-change="showReturnVisit"    
                         :http-request="uploadReturnVisit">
                     <img v-if="returnVisitUrl" :src="returnVisitUrl" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                   </el-upload>
                 </el-col>
             </el-row>
-            <mt-button  class='commit' type="primary" @click="commit()">提交</mt-button>
+            <mt-button  class='commit' type="primary" @click="commit()" :disabled="info.status=='审核中'||info.status=='已审核'">提交</mt-button>
         </div>
     </div>
 </template>
@@ -107,6 +105,7 @@ import { mapGetters } from 'vuex'
 import { _post , _get } from '../api/axios'
 import { Toast } from 'mint-ui'
 import { imageCompression } from "../util/imageCompression"
+import { Indicator } from 'mint-ui';    //加载框
 export default{
     props:["info","detailShow"],
     name:'detail',
@@ -123,7 +122,7 @@ export default{
                 }
             ],
             returnWay:"",           //回访方式，为同一个学生每上三次课要求老师进行电话回访取代微信回访
-            realCourseTime:'',
+            //realCourseTime:'',
             remark:"",//备注
             photoEvidenceUrl:"",
             photoEvidencePath:"",//拍照取证地址路径
@@ -138,7 +137,10 @@ export default{
     },
     filters:{
         time:function(value){
-            return value.slice(0,2) + ":" + value.slice(2);
+            if(value)
+                return value.slice(0,2) + ":" + value.slice(2);
+            else
+                return "";
         }
     },
     watch:{
@@ -155,11 +157,12 @@ export default{
                         if(typeof response.data.count == 'number'){
                             if( (response.data.count+1) % 3 == 0 ){
                                 _this.returnWay = "电话回访";
-                                Toast({
-                                    message:"这次需要提交电话回访哦~",
-                                    position:"bottom",
-                                    duration:2500
-                                });
+                                if(_this.info.status!='审核中' && _this.info.status!="已审核")
+                                    Toast({
+                                        message:"这次需要提交电话回访哦~",
+                                        position:"bottom",
+                                        duration:2500
+                                    });
                             }else{
                                 _this.returnWay = "微信回访";
                             }
@@ -189,28 +192,33 @@ export default{
         }
     },
     methods:{
-        onValuesChange(picker,values){
-            this.realCourseTime = values[0];
+        showMtPopup(){                                                          //点击实际课时时弹出输入框
+            if(!this.info.realCourseTime || this.info.status=='未通过')       //若实际课时已经有内容，则不弹出
+                this.popupVisible = true;
         },
-        cancel(){
-            this.realCourseTime = '';
+        onValuesChange(picker,values){
+            //this.realCourseTime = values[0];
+            if(this.info)
+                this.info.realCourseTime = values[0];
+        },
+        cancel(){                               //实际课时输入框的取消按钮
+            //this.realCourseTime = '';
             this.popupVisible = false;
         },
-        confirm(){
+        confirm(){                              //实际课时输入框的确认按钮
             if(!this.realCourseTime)
-            this.realCourseTime=1.5;
+                this.info.realCourseTime=1.5;
             this.popupVisible=false;
         },
-        closeDetail(){
+        closeDetail(){                              //关闭当前详情页
             this.$emit('update:detailShow', false);
         },
-        showPhotoEvidence(file) {
+        
+        showPhotoEvidence(file) {                   //上传图片后显示预览图
             this.photoEvidenceUrl = URL.createObjectURL(file.raw);
         },
-        showReturnVisit(file){
+        showReturnVisit(file){                       //上传图片后显示预览图
             this.returnVisitUrl = URL.createObjectURL(file.raw);
-        },
-        beforeAvatarUpload(file) {
         },
         uploadPhotoEvidence(file){
             this.uploadPhoto(file,"photoEvidence")
@@ -237,38 +245,39 @@ export default{
                     },
                     function(error){
                         _this.uploadError(error);
+                        _this.closeIndicator();
                     }
                 )
             })
             
         },
-        setPhotoEvidencePath(response,file,fileList){
+        setPhotoEvidencePath(response){
             this.photoEvidencePath = response.data.name;
             this.$refs.returnVisit.submit();
         },
-        setReturnVisitPath(response,file,fileList){
+        setReturnVisitPath(response){
             var _this = this;
             this.returnVisitPath = response.data.name;
             var data = {
                 workNumber:this.info.workNumber,
                 sno:this.info.sno,
-                courseNo:this.info.courseNo,
+                /* courseNo:this.info.courseNo, */
                 startTime:this.info.startTime,
-                endTime:this.info.endTime,
+                /* endTime:this.info.endTime,
                 courseNumber:this.info.courseNumber,
-                courseHour:this.info.courseHour,
-                realCourseTime:this.realCourseTime,//实际课时
+                courseHour:this.info.courseHour, */
+                realCourseTime:this.info.realCourseTime,//实际课时
                 remark:this.remark,
                 photoEvidencePath:this.photoEvidencePath,
-                returnVisitPath:this.returnVisitPath
-
+                returnVisitPath:this.returnVisitPath,
+                status:'审核中'
             };
             _post(
                 "http://192.168.232.243:3000/audit",
                 data,
                 function(res){
                    if(res.data == 'successful'){
-                        _this.status = '审核中';
+                        _this.info.status = '审核中';
                        Toast({
                             message: '提交成功',
                             iconClass: 'icon-xiaolian iconfont',
@@ -295,23 +304,33 @@ export default{
                 }
             )
         },
-        uploadError(err,file,fileList){ 
+        uploadError(err){ 
+            this.closeIndicator()
             Toast({
-                message: '提交成功',
+                message: '提交失败',
                 iconClass: 'icon-xiaolian iconfont',
                 duration:1000
             });
         },
         commit(){
-            if(!this.realCourseTime){
+            if(!this.info.realCourseTime){
                 Toast({
                     message: '请完善信息',
                     iconClass: 'icon-xiaolian iconfont',
                     duration:1000
                 });
                 return;
-            }
+            } 
             this.$refs.photoEvidence.submit();
+        },
+        openIndicator(content){
+            Indicator.open({
+                text: content,
+                spinnerType: 'fading-circle'
+            });
+        },
+        closeIndicator(){
+            Indicator.close();
         }
     }
 }
