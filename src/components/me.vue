@@ -30,7 +30,7 @@
             </el-col>
         </el-row>
         <el-row class="logout">
-            <el-col class="rol-textCenter" :span="24">
+            <el-col class="rol-textCenter" :span="24" @click.native = "Logout()">
                 <span>退出登录</span>
             </el-col>
         </el-row>
@@ -44,6 +44,15 @@
             ...mapGetters({
                 teacherInfo:'teacherInfo'
             })
+        },
+        methods:{
+            ...mapActions([
+                'logout'
+            ]),
+            Logout(){
+                this.logout();
+                this.$router.replace({path:"/login"});
+            }
         }
     }
 </script>

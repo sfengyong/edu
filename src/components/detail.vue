@@ -64,7 +64,7 @@
                     <el-upload
                         ref="photoEvidence"
                         class="avatar-uploader"
-                        action="http://192.168.232.243:3000/photo/photoEvidence"
+                        action="photo/photoEvidence"
                         :multiple = 'false'
                         :auto-upload='false'
                         :show-file-list="false"
@@ -83,7 +83,7 @@
                     <el-upload
                         ref="returnVisit"
                         class="avatar-uploader"
-                        action="http://192.168.232.243:3000/photo/returnVisit"
+                        action="photo/returnVisit"
                         :multiple = 'false'
                         :auto-upload='false'
                         :show-file-list="false"
@@ -148,7 +148,7 @@ export default{
             var _this = this;
             if(newValue){
                 _get(
-                    "http://192.168.232.243:3000/getClassCount",
+                    "getClassCount",
                     {
                         workNumber:this.teacherInfo.workNumber,
                         sno:this.info.sno
@@ -231,7 +231,7 @@ export default{
             var _this = this;
             imageCompression(file.file,function(base64){
                 _post(
-                    "http://192.168.232.243:3000/photo/" + species,
+                    "photo/" + species,
                     {
                         base64:base64,
                         type:file.file.name.match(IMAGE_REG)[1]
@@ -273,7 +273,7 @@ export default{
                 status:'审核中'
             };
             _post(
-                "http://192.168.232.243:3000/audit",
+                "audit",
                 data,
                 function(res){
                    if(res.data == 'successful'){

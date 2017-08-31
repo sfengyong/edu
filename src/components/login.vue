@@ -35,10 +35,14 @@
                 loginState:'login'
             })
         },
+        mounted(){
+            if(this.loginState)
+                this.$router.replace({ path: "/main"});
+        },
         watch:{
             loginState:function (newVal,oldVal) {
                 if(newVal){
-                    this.router.replace({ path: "/main"});
+                    this.$router.replace({ path: "/main"});
                 }
             }
         },
@@ -58,7 +62,8 @@
                         resolve(_this.token);
                     else
                         reject()
-                }).then(function (token) {
+                }).then(
+                    function (token) {
                         _this.getTeacherInfo(token);
                         _this.$router.push({path:"/main"});
                     },function () {

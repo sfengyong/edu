@@ -31,7 +31,7 @@ const mutations = {
 const actions = {
     login:( { commit },data ) =>{
         _post(
-            "http://192.168.232.243:3000/teacherLogin",
+            "teacherLogin",
             data,
             response =>{
                 commit(LOGIN,response.data);
@@ -39,6 +39,9 @@ const actions = {
             error =>{
                 console.log(error);
             })
+    },
+    logout:( { commit } ) =>{
+        commit(LOGOUT);
     },
     getToken:({ commit })=>{
         const token = getFromStorage("token");

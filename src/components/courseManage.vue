@@ -100,7 +100,7 @@ export default{
     },
     mounted(){
         var _this = this;
-        _get("http://192.168.232.243:3000/getArrangeClass",{workNumber:this.teacherInfo.workNumber},function(data){
+        _get("getArrangeClass",{workNumber:this.teacherInfo.workNumber},function(data){
             _this.dataConversion(data.data);
         },function(){
 
