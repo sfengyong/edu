@@ -29,6 +29,15 @@
                 <i class="iconfont right">&#xe603;</i>
             </el-col>
         </el-row>
+        <el-row @click.native="safe()">
+            <el-col class="rol-textCenter" :span="3">
+                <i class="iconfont">&#xe626;</i>
+            </el-col>
+            <el-col :span="21">
+                <span>账号安全</span>
+                <i class="iconfont right">&#xe603;</i>
+            </el-col>
+        </el-row>
         <el-row class="logout">
             <el-col class="rol-textCenter" :span="24" @click.native = "Logout()">
                 <span>退出登录</span>
@@ -49,6 +58,9 @@
             ...mapActions([
                 'logout'
             ]),
+            safe(){
+                this.$router.push({path:'/accountSecurity'});
+            },
             Logout(){
                 this.logout();
                 this.$router.replace({path:"/login"});

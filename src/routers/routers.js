@@ -8,6 +8,8 @@ import login from "../components/login.vue"
 import main from "../components/main.vue"
 import courseManage from "../components/courseManage.vue"
 import detail from "../components/detail.vue"
+import accountSecurity from "../components/accountSecurity.vue"
+import changePassword from "../components/changePassword.vue"
 
 import store from "../store/"
 
@@ -32,6 +34,22 @@ const router = new Router({
             meta: {
                 requireLogin: true
             }
+        },
+        {
+            path:"/accountSecurity",
+            name:"accountSecurity",
+            component:accountSecurity,
+            meta:{
+                requireLogin:true
+            },
+            children:[{
+                path:"changePassword",
+                name:"changePassword",
+                component:changePassword,
+                meta:{
+                    requireLogin:true
+                }
+            }]
         },
         /* {
             path:"/detail",

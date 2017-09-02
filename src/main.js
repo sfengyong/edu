@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App.vue'
-import { Row, Col,Input,Button ,Table, TableColumn, Upload,} from 'element-ui'
+import { Row, Col,Input,Button ,Table, TableColumn, Upload} from 'element-ui'
 import router from './routers/routers'
 /*import axios from "axios"*/
 
