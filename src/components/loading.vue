@@ -20,11 +20,13 @@
     height: 100%;
     background: rgba(0,0,0,0.15);
     .spinner {
-        width: 60px;
-        height: 60px;
+        /* width: 60px;
+        height: 60px; */
+        width: 0.8rem;
+        height: 0.8rem;
         position: relative;
-        margin: 100px auto;
-
+        /* margin: 100px auto; */
+        margin:1.33rem auto;
         top: 30%;
     }
     .double-bounce1,

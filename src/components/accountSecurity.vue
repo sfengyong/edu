@@ -31,7 +31,8 @@ export default{
     height: 100%;
     background: #f3f3f6;
     .emptyWrap{
-        height: 3.3rem;
+        /* height: 3.3rem; */
+        height: 1.07rem;
     }
 }
 </style>

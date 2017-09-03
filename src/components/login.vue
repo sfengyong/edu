@@ -86,10 +86,12 @@
             top: 50%;
             transform: translateY(-50%);
             .el-row{
-                margin-top: 1.2rem;
+                /* margin-top: 1.2rem; */
+                margin-top: 0.2rem;
                 .el-col{
                     span{
-                        font-size: 3rem;
+                        font-size: 0.48rem;
+                        /* font-size: 3rem; */
                         color: rgba(255, 255, 255, 0.7);
                     }
                     .el-input__inner{
@@ -99,14 +101,17 @@
                         border-radius: 0px;
                         margin-top: -0.45rem;
                         color:rgba(255, 255, 255, 0.7);
-                        font-size:1.8rem;
+                        /* font-size:1.8rem; */
+                        font-size: 0.29rem;
                     }
                     .el-button{
                         width: 100%;
-                        padding: 0.7rem;
+                        /* padding: 0.7rem; */
+                        padding: 0.1rem;
                         background: rgba(255, 255, 255, 0);
                         span{
-                            font-size: 1rem;
+                            font-size:0.16rem;
+                            /* font-size: 1rem; */
                         }
                         &:focus{
                             color: white;

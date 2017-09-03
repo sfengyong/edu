@@ -107,6 +107,9 @@ export default{
         });
     },
     methods:{
+        test(){
+            alert(1);
+        },
         showHeader(){
             //处理头部日期显示
             var today = new Date();
@@ -206,7 +209,8 @@ export default{
     width: 100%;
     height: 100%;
     .tableHeader {
-        top: 3.3rem;
+        top: 1rem;
+        /* top: 3.3rem; */
         right: 0;
         left: 0;
         position: fixed;
@@ -214,35 +218,49 @@ export default{
         .el-col {
             text-align: center;
             box-sizing: border-box;
-            height:3.7rem;
-            padding-top: 0.5rem;
+            /* height:3.7rem;
+            padding-top: 0.5rem; */
+            height: 1rem;
+            padding-top: 0.08rem;
             background: #f3f3f6;
             .month{
-                font-size: 1.7rem;
-                padding-top: 0.8rem;
+                /* font-size: 1.7rem;
+                padding-top: 0.8rem; */
+                font-size:0.272rem;
+                padding-top:0.13rem;
             }
             .date{
-                font-size: 0.4rem;
+                /* font-size: 0.4rem; */
+                font-size: 0.064rem;
             }
             .day{
-                font-size: 0.6rem
+                /* font-size: 0.6rem; */
+                font-size: 0.09rem;
             }
         }
     }
     .tableWrap{
-        top:7rem;
+        /* top:7rem; */
+        top: 1.92rem;
+        left: 0;
         background: #f3f3f6;
         .table{
             box-sizing: border-box;
             text-align: center;
-            height: 8rem;
-            padding-top: 1rem;
+            /* height: 1.28rem; */
+            height: 2.65rem;
+            padding-top:0.16rem;
+            /* height: 8rem;
+            padding-top: 1rem; */
             background: white;
-            border-right: 0.1rem solid rgba(243, 245, 245, 0.74);;
-            border-bottom: 0.1rem solid rgba(243, 245, 245, 0.74);;
+            /* border-right: 0.1rem solid rgba(243, 245, 245, 0.74);
+            border-bottom: 0.1rem solid rgba(243, 245, 245, 0.74); */
+            border-right:0.02rem solid rgba(243, 245, 245, 0.74);
+            border-bottom:0.02rem solid rgba(243, 245, 245, 0.74);
         }
         .index{
-            padding-top: 2.2rem;
+            /* padding-top: 2.2rem; */
+            padding-top: 0.352rem;
             background: #f3f3f6;
         }
         .color{

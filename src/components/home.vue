@@ -54,19 +54,22 @@ export default{
         header{
             width: 100%;
             box-sizing: border-box;
-            padding: 1rem;
-           /*  background: #fafafa; */
+            /* padding: 1rem; */
+            padding:0.16rem;
             text-align: center;
             position: relative;
             span{
-                font-size: 2rem;
+                font-size: 0.32rem;
+                /* font-size: 2rem; */
             }
             .iconfont{
                 position: absolute;
                 top: 50%;
                 transform: translateY(-50%);
-                right: 1.2rem;
-                font-size: 2rem;
+                /* right: 1.2rem; */
+                /* font-size: 2rem; */
+                right:0.19rem;
+                font-size:0.32rem;
             }
         }
         .mint-swipe{
@@ -75,30 +78,39 @@ export default{
         .function{
             width: 100%;
             box-sizing: border-box;
-            padding: 1.3rem 2rem;
-            border-top: 0.1rem solid #e5e6e6;
+            /* padding: 1.3rem 2rem; */
+            padding: 0.208rem 0.32rem;
+            /* border-top: 0.1rem solid #e5e6e6; */
+            border-top:0.02rem solid #e5e6e6;
             .wrap{
                 text-align: center;
                 .iconfont{
-                    font-size: 2.8rem;
+                    font-size: 0.45rem;
+                    /* font-size: 2.8rem; */
                     color: #88b3c7;
                 }
                 .name{
-                    font-size: 1rem;
+                    font-size: 0.16rem;
+                    /* font-size: 1rem; */
                 }
             }
         }
         .announcement{
             width: 100%;
-            margin-top: 10rem;
+            margin-top: 1.6rem;
+            /* margin-top: 10rem; */
             .title{
                 width: 100%;
                 box-sizing:border-box;
-                padding: 0.3rem 2rem;
+                padding: 0.05rem 0.32rem;
+                /* padding: 0.3rem 2rem; */
                 background: #fafafa;
-                border-top:0.1rem solid #e5e6e6;
-                border-bottom:0.1rem solid #e5e6e6;
-                font-size: 1.5rem;
+                /* border-top:0.1rem solid #e5e6e6;
+                 border-bottom:0.1rem solid #e5e6e6; */
+                border-top:0.02rem solid #e5e6e6;
+                border-bottom: 0.02rem solid #e5e6e6;
+                /* font-size: 1.5rem; */
+                font-size: 0.24rem;
 
             }
         }

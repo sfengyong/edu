@@ -77,47 +77,57 @@
     header{
         width: 100%;
         box-sizing: border-box;
-        padding: 1rem;
-        /* background: #fafafa; */
+        /* padding: 1rem; */
+        padding:0.16rem;
         text-align: center;
         position: relative;
         span{
-            font-size: 2rem;
+            /* font-size: 2rem; */
+            font-size: 0.32rem;
         }
         .iconfont{
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            right: 1.2rem;
-            font-size: 2rem;
+            /* right: 1.2rem;
+            font-size: 2rem; */
+            right: 0.19rem;
+            font-size: 0.32rem;
         }
     }
     .info{
         width: 100%;
         box-sizing: border-box;
-        padding: 1rem 0;
+        /* padding: 1rem 0; */
+        padding: 0.86rem 0;
         text-align: center;
         .avator{
             img{
-                width: 6rem;
-                height: 6rem;
+                /* width: 6rem;
+                height: 6rem; */
+                width: 2.06rem;
+                height: 2.06rem;
                 border-radius: 50%;
                 background: red;
             }
             .edit{
                 vertical-align: top;
                 position: absolute;
-                right: 1rem;
+                /* right: 1rem; */
+                right: 0.16rem;
                 color: rgba(0,0,0,0.8);
             }
         }
         .name{
-            margin-top: 1.5rem;
-            font-size: 1.5rem;
+            /* margin-top: 1.5rem;
+            font-size: 1.5rem; */
+            margin-top: 0.24rem;
+            font-size: 0.24rem;
             color: rgba(0,0,0,0.8);
         }
         .position{
-            font-size: 1rem;
+            /* font-size: 1rem; */
+            font-size: 0.16rem;
             color: rgba(0,0,0,0.8);
         }
     }
@@ -125,23 +135,29 @@
         background: white;
 
         .iconfont{
-            font-size: 2.5rem;
+            /* font-size: 2.5rem; */
+            font-size:0.9rem;
             color: #88b3c7;
         }
         .rol-textCenter{
             text-align: center;
         }
         .rol-border{
-            border-bottom: 0.12rem solid #f3f3f3;
+            /* border-bottom: 0.12rem solid #f3f3f3; */
+            border-bottom: 0.02rem solid #f3f3f3;
 
         }
         .el-col{
-            padding:1rem 0rem;
+            /* padding:1rem 0rem; */
+            padding: 0.16rem 0rem;
             span{
                 vertical-align: top;
                 display: inline-block;
-                margin-top: 0.28rem;
-                font-size: 1.6rem;
+                /* margin-top: 0.28rem;
+                font-size: 1.6rem; */
+                margin-top:0.244rem;
+                margin-left:0.2rem;
+                font-size:0.456rem;
             }
             i{
                 float: right;
@@ -149,7 +165,8 @@
         }
     }
     .logout{
-        margin-top: 2rem;
+        /* margin-top: 2rem; */
+        margin-top: 0.32rem;
     }
 }
 </style>

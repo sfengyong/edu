@@ -321,28 +321,35 @@ export default{
     background: #f3f5f5;
     .courseName{
         width: 100%;
-        font-size: 1.6rem;
+        /* font-size: 1.6rem; */
+        font-size:0.256rem;
         box-sizing: border-box;
-        padding: 0.4rem;
+        /* padding: 0.4rem; */
+        padding:0.064rem;
     }
     .courseDetail{
         .item{
             background: white;
-            height: 4.4rem;
+            /* height: 4.4rem; */
+            height:0.704rem;
             box-sizing: border-box;
-            padding: 1rem 2.3rem 1rem 1.2rem;
-            border-bottom: 0.1rem rgba(217,217,217,0.43) solid;
+            /* padding: 1rem 2.3rem 1rem 1.2rem; */
+            padding:0.16rem 0.368rem 0.16rem 0.19rem;
+           /*  border-bottom: 0.1rem rgba(217,217,217,0.43) solid; */
+            border-bottom:0.02rem rgba(217,217,217,0.43) solid;
             .infoTitle{
                 display: inline-block;
                 width: 25%;
-                font-size: 1.7rem;
+                /* font-size: 1.7rem; */
+                font-size: 0.272rem;
                 color: rgba(0,0,0,0.8);
             }
             .infoContent{
                 display: inline-block;
                 width:75%;
                 text-align: right;
-                font-size: 1.7rem;
+                /* font-size: 1.7rem; */
+                font-size: 0.272rem;
                 color: rgba(0,0,0,0.8);
                 input{
                     border: none;
@@ -350,17 +357,21 @@ export default{
                     display: inline-block;
                     width: 100%;
                     height: 100%;
-                    font-size: 1.7rem;
+                    /* font-size: 1.7rem; */
+                    foint-size:0.272rem;
                 }
                 
             }
             .mint-popup{
-                width: 20rem;
+                /* width: 20rem; */
+                width: 3.2rem;
                 text-align: center;
                 span{
-                    font-size: 1.8rem;
+                    /* font-size: 1.8rem; */
+                    font-size:0.29rem;
                     display: inline-block;
-                    margin-top: 0.5rem;
+                    /* margin-top: 0.5rem; */
+                    margin-top:0.08rem;
                 }
                 .mint-button{
                     display: inline-block;
@@ -379,22 +390,28 @@ export default{
             margin-right:1.2rem;
         }
         .realClass{
-            height: 3.8rem;
-            padding: 1rem 2.3rem 1rem 1.2rem;
+            /* height: 3.8rem;
+            padding: 1rem 2.3rem 1rem 1.2rem; */
+            height: 0.61rem;
+            padding:0.16rem 0.368rem 0.16rem 0.19rem;
         }
         .el-row{
             background: white;
             box-sizing: border-box;
-            padding:1.5rem 1rem;
-            border-bottom:0.1rem solid rgba(217,217,217,0.43);
+            /* padding:1.5rem 1rem;
+            border-bottom:0.1rem solid rgba(217,217,217,0.43); */
+            padding: 0.24rem 0.16rem;
+            border-bottom: 0.02rem solid rgba(217, 217, 217, 0.43);
             .el-col{
-                font-size:1.6rem;
+                /* font-size:1.6rem; */
+                font-size:0.26rem;
                 .avatar-uploader .el-upload {
                     border: 1px dashed rgba(217,217,217,0.43);
                     border-radius: 6px;
                     cursor: pointer;
                     position: relative;
-                    right: 0.2rem;
+                    /* right: 0.2rem; */
+                    right: 0.03rem;
                     overflow: hidden;
                 }
                 .avatar-uploader .el-upload:hover {
@@ -403,14 +420,19 @@ export default{
                 .avatar-uploader-icon {
                     font-size: 28px;
                     color: #8c939d;
-                    width: 3.8rem;
+                    /* width: 3.8rem;
                     height: 3.8rem;
-                    line-height: 3.8rem;
+                    line-height: 3.8rem; */
+                    width: 0.61rem;
+                    height: 0.61rem;
+                    line-height: 0.61rem;
                     text-align: center;
                 }
                 .avatar {
-                    width: 3.8rem;
-                    height: 3.8rem;
+                    /* width: 3.8rem;
+                    height: 3.8rem; */
+                    width: 0.61rem;
+                    height: 0.61rem;
                     display: block;
                 }
 

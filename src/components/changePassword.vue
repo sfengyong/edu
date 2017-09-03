@@ -25,18 +25,30 @@
         <div class="item" @click="confirm">
             <mt-button type="primary">确认修改</mt-button>
         </div>
+        <loading v-show="loadingShow"></loading>
     </div>
 </template>
 <script>
+    import loading from "./loading.vue"
     import { _post } from "../api/axios"
     import { tip } from "../util/tip"
+    import { mapGetters } from 'vuex'
     export default{
         data(){
             return{
                 oldPassword:"",
                 newPassword:"",
-                confirmPassword:""
+                confirmPassword:"",
+                loadingShow:false
             }
+        },
+        computed:{
+            ...mapGetters({
+                teacherInfo:"teacherInfo"
+            })
+        },
+        components:{
+            loading:loading  
         },
         methods:{
             confirm(){
@@ -49,20 +61,31 @@
                     tip("新密码填写不一致",'middle','1000');
                     return
                 }
+                this.loadingShow = true;
                 _post(
                     "changePassword",
                     {
+                        workNumber:this.teacherInfo.workNumber,
                         oldPassword:this.oldPassword,
                         newPassword:this.newPassword
                     },
                     (response) =>{
                         if(response.data == "successful"){
                             tip("密码修改成功",'middle','1000',"icon-iconchenggong");
+                            setTimeout(function(){
+                                _this.loadingShow = false;
+                                _this.$router.push({path:"accountSecurity"});
+                            },1000);
+                        }else if(response.data == 'oldPassword error'){
+                            _this.loadingShow = false;
+                            tip("旧密码错误",'middle','1000',"icon-daku");
                         }else{
+                            _this.loadingShow = false;
                             tip("密码修改失败",'middle','1000',"icon-daku");
                         }
                     },
                     (error) =>{
+                        _this.loadingShow = false;
                         tip("密码修改失败",'middle','1000',"icon-daku");
                     }
                 )
@@ -80,24 +103,31 @@
     top: 0;
     left: 0;
     .emptyWrap{
-        height: 3.3rem;
+        /* height: 3.3rem; */
+        height: 1.07rem;
     }
     
     .item {
-        margin-top: 1.8rem;
+        /* margin-top: 1.8rem; */
+        margin-top: 0.29rem;
         .password {
             background: white;
-            height: 4.4rem;
+            /* height: 4.4rem; */
+            height: 1.2rem;
             box-sizing: border-box;
-            padding: 1rem 2.3rem 1rem 1.2rem;
-            border-bottom: 0.1rem rgba(217, 217, 217, 0.43) solid;
+            /* padding: 1rem 2.3rem 1rem 1.2rem; */
+            padding:0.16rem 0.37rem 0.16rem 0.2rem;
+            /* border-bottom: 0.1rem rgba(217, 217, 217, 0.43) solid; */
+            border-bottom: 0.02rem rgba(217, 217, 217, 0.43) solid;
             .title {
-                font-size: 1.7rem;
+                /* font-size: 1.7rem; */
+                font-size: 0.42rem;
             }
             input {
                 width: 50%;
                 float: right;
-                font-size: 1.9rem;
+                /* font-size: 1.9rem; */
+                font-size: 0.62rem;
                 border: none;
                 outline: none;
             }

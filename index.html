@@ -3,6 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+
+    <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+
     <link rel="stylesheet" href="http://at.alicdn.com/t/font_368210_abwbh8xuugtlnmi.css">
     <!-- <link rel="stylesheet" href="http://at.alicdn.com/t/font_8d5l8fzk5b87iudi.css"> -->
     <title>edu</title>
@@ -15,7 +18,7 @@
             if(event.touches.length>1){  
                 event.preventDefault();  
             }  
-        })  
+        });  
         var lastTouchEnd=0;  
         document.addEventListener('touchend',function (event) {  
             var now=(new Date()).getTime();  
@@ -23,9 +26,8 @@
                 event.preventDefault();  
             }  
             lastTouchEnd=now;  
-        },false)  
+        },false);
     }  
-
     </script>
     <script src="/dist/build.js"></script>
   </body>
