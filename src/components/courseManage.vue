@@ -11,35 +11,35 @@
                 {{header.month}}月
             </el-col>
             <el-col :span="3">
-                <div class="date">{{header.date[0]}}</div>
+                <div class="date">{{dateInHeader[0]}}</div>
                 <div class="day">日</div>
             </el-col>
             <el-col :span="3">
-                <div class="date">{{header.date[1]}}</div>
+                <div class="date">{{dateInHeader[1]}}</div>
                 <div class="day">一</div>
             </el-col>
             <el-col :span="3">
-                <div class="date">{{header.date[2]}}</div>
+                <div class="date">{{dateInHeader[2]}}</div>
                 <div class="day">二</div>
             </el-col>
             <el-col :span="3">
-                <div class="date">{{header.date[3]}}</div>
+                <div class="date">{{dateInHeader[3]}}</div>
                 <div class="day">三</div>
             </el-col>
             <el-col :span="3">
-                <div class="date">{{header.date[4]}}</div>
+                <div class="date">{{dateInHeader[4]}}</div>
                 <div class="day">四</div>
             </el-col>
             <el-col :span="3">
-                <div class="date">{{header.date[5]}}</div>
+                <div class="date">{{dateInHeader[5]}}</div>
                 <div class="day">五</div>
             </el-col>
             <el-col :span="3">
-                <div class="date">{{header.date[6]}}</div>
+                <div class="date">{{dateInHeader[6]}}</div>
                 <div class="day">六</div>
             </el-col>
         </el-row>
-        <el-row class="tableWrap">
+        <el-row class="tableWrap"  @touchstart.native="touch($event)" @touchmove.native="move($event)">
             <el-col :span="3">
                 <el-row v-for="item in 6">
                     <el-col :span="24"  class="table index">{{item}}</el-col>
@@ -63,12 +63,17 @@
 <script>
     import { mapGetters } from 'vuex'
     import { _get } from "../api/axios.js"
+    import { cloneObject } from "../util/cloneObject"
+    import { throttle } from "../util/throttle"
     import detail from "./detail.vue"
 export default{
     name:'courseManage',
     data(){
         return{
             header:"",
+            dateInHeader:"",
+            weekCache:"",
+            monthCache:"",
             //sevenDay:[[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}]]
             sevenDay:[[],[],[],[],[],[],[]],
             info:"",
@@ -78,7 +83,13 @@ export default{
                 "审核中":"reviewing",
                 "已审核":"success",
                 "未通过":"danger"
-            }
+            },
+            touchStartX:"",
+            touchEndX:"",
+            moveXDistance:"",
+            touchStartY:"",
+            touchEndY:"",
+            moveYDistance:"",
         }
     },
     computed:{
@@ -107,14 +118,11 @@ export default{
         });
     },
     methods:{
-        test(){
-            alert(1);
-        },
         showHeader(){
             //处理头部日期显示
             var today = new Date();
             this.header = new Object();
-            this.header.date = new Array();
+            this.dateInHeader = new Array();
             this.header.month = today.getMonth()+1;
             var lastmonth = today.getMonth() || 12;
 
@@ -124,25 +132,27 @@ export default{
             var zero = today.getDate() - today.getDay();
             if(zero < 0){
                 zero = lastMonthDay + zero;
-                this.header.date[0] = zero;
+                this.dateInHeader[0] = zero;
                 for( var i = 1 ; i < 7 ; i++ ){
-                    this.header.date[i] = ( this.header.date[i-1]+1 ) % lastMonthDay || lastMonthDay;
+                    this.dateInHeader[i] = ( this.dateInHeader[i-1]+1 ) % lastMonthDay || lastMonthDay;
                 }
-                var index = this.header.date.indexOf(1);
+                var index = this.dateInHeader.indexOf(1);
                 if( index != -1){
-                    this.header.date[index] = this.header.month + '月';
+                    this.dateInHeader[index] = this.header.month + '月';
                     this.header.month--;
                 }
             }else{
-                this.header.date[0] = zero;
+                this.dateInHeader[0] = zero;
                 for(var i = 1 ; i < 7 ; i++ ){
-                    this.header.date[i] = (this.header.date[i-1]+1) %currentMonthDay || currentMonthDay;
+                    this.dateInHeader[i] = (this.dateInHeader[i-1]+1) %currentMonthDay || currentMonthDay;
                 }
-                var index = this.header.date.indexOf(1);
+                var index = this.dateInHeader.indexOf(1);
                 if( index != -1){
-                    this.header.date[index] = this.header.month + 1 + '月';
+                    this.dateInHeader[index] = this.header.month + 1 + '月';
                 }
             }
+            this.weekCache = cloneObject( this.dateInHeader );
+            this.monthCache = today.getMonth() + 1;
         },
         getMonthDay(year,month){
             var thirtyOne = [1,3,5,7,8,10,12];
@@ -183,10 +193,10 @@ export default{
         fillTable(data){
             for( var i = 0 ; i < data.length ; i++ ){
 
-                var index = this.header.date.indexOf(data[i].day);//判断当前读取的记录对应着表头哪一列
+                var index = this.dateInHeader.indexOf(data[i].day);//判断当前读取的记录对应着表头哪一列
 
                 if(index == -1 && data[i].day == 1){
-                    var index = this.header.date.indexOf(this.header.month+1+'月');
+                    var index = this.dateInHeader.indexOf(this.header.month+1+'月');
                 }
                 if(index != -1){
                     this.judgmentTime(index,data[i]);
@@ -199,6 +209,83 @@ export default{
         transferData(item){
             this.info = item;
             this.detailShow = true;
+        },
+        touch(event){
+            event.preventDefault();
+            this.touchStartX = event.changedTouches[0].pageX;
+            this.touchStartY = event.changedTouches[0].pageY;
+        },
+        move(event){
+            throttle(this.calculateMove,event,this,80);
+        },
+        changeHeader(direction){
+            var _this = this;
+            if( direction > 0 ){             //向右滑动
+
+                var condition = this.dateInHeader.every((item,index,array) => {                 //判断当前出现的一排日期是否出现一号
+                                        return typeof item == 'number';
+                                    });
+                    if( condition ){
+                        var lastMonth = this.header.month - 1 || 12;
+                    }else{
+                        var lastMonth = this.header.month;
+                    }
+                this.dateInHeader.forEach(function(item,index) {
+                    if( typeof(item) == 'string' ){     //每月的一号可能原本不是存储数字1
+                        item = 1;
+                    }
+                    _this.$set(_this.dateInHeader,index,item-7);    //将当周各天每天日期减7
+                });
+                if( this.dateInHeader[0] <= 0 || this.dateInHeader[this.dateInHeader.length-1] <= 0){ //每天日期减7之后出现负数的处理
+                    var lastMonthDay = this.getMonthDay( new Date().getFullYear(),lastMonth);
+                    this.dateInHeader.forEach(function(item,index){
+                        if( item == 1 ){
+                            item = _this.header.month + '月';
+                            _this.$set(_this.dateInHeader,index,item);
+                            _this.header.month = _this.header.month - 1 || 12 ;
+                        }
+                        if(item <= 0 ){
+                            var value = item + lastMonthDay;
+                            if( value == 1 ){
+                                value = _this.header.month  + '月';
+                                _this.header.month = _this.header.month - 1 || 12 ;
+                            }                                
+                            _this.$set(_this.dateInHeader,index,value);
+                        }
+                    });
+                }
+            }else if( direction < 0){        //向左滑动
+                this.dateInHeader.forEach(function(item) {
+                    item -= 7;
+                });
+                if( this.dateInHeader[0] < 0 ){
+                    var thisMonth = new Date().getMonth() + 1;
+                    var nextMonth = (new Date().getMonth()+2)%12 || 12 ;
+                    var lastMonthDay = this.getMonthDay( new Date().getFullYear(),nextMonth);
+                    this.dateInHeader.forEach(function(item){
+                        if(item <= 0 ){
+                            item += lastMonthDay;
+                        }
+                    });
+                }
+            }
+        },
+        calculateMove(event){
+            event.preventDefault();
+
+            this.touchEndX = event.changedTouches[0].pageX;
+            this.touchEndY = event.changedTouches[0].pageY;
+
+            this.moveXDistance = this.touchEndX-this.touchStartX;
+            this.moveYDistance = this.touchEndY-this.touchStartY;
+
+            if ( Math.abs(this.moveXDistance) > Math.abs(this.moveYDistance) && this.moveXDistance > 0 ) {
+
+                this.changeHeader(1);            //向右滑动 
+            }else if ( Math.abs(this.moveXDistance) > Math.abs(this.moveYDistance) && this.moveXDistance < 0 ) {
+
+                this.changeHeader(-1)            //向左滑动
+            }
         }
     }
 }
