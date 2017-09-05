@@ -74,6 +74,7 @@ export default{
             dateInHeader:"",
             weekCache:"",
             monthCache:"",
+            currentYear:"",
             //sevenDay:[[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}]]
             sevenDay:[[],[],[],[],[],[],[]],
             info:"",
@@ -110,6 +111,7 @@ export default{
         this.showHeader();
     },
     mounted(){
+        this.currentYear =  new Date().getFullYear();
         var _this = this;
         _get("getArrangeClass",{workNumber:this.teacherInfo.workNumber},function(data){
             _this.dataConversion(data.data);
@@ -221,26 +223,41 @@ export default{
         changeHeader(direction){
             var _this = this;
             if( direction > 0 ){             //向右滑动
-
                 var condition = this.dateInHeader.every((item,index,array) => {                 //判断当前出现的一排日期是否出现一号
                                         return typeof item == 'number';
                                     });
-                    if( condition ){
-                        var lastMonth = this.header.month - 1 || 12;
-                    }else{
-                        var lastMonth = this.header.month;
-                    }
+                if( condition){
+                    var lastMonth = this.header.month - 1 || 12;
+                }else{
+                    var lastMonth = this.header.month;
+                }
                 this.dateInHeader.forEach(function(item,index) {
-                    if( typeof(item) == 'string' ){     //每月的一号可能原本不是存储数字1
+                    if( typeof(item) == 'string' ){                                             //每月的一号可能原本不是存储数字1
                         item = 1;
                     }
                     _this.$set(_this.dateInHeader,index,item-7);    //将当周各天每天日期减7
                 });
-                if( this.dateInHeader[0] <= 0 || this.dateInHeader[this.dateInHeader.length-1] <= 0){ //每天日期减7之后出现负数的处理
-                    var lastMonthDay = this.getMonthDay( new Date().getFullYear(),lastMonth);
+                if( this.dateInHeader[0] <= 0 || this.dateInHeader[this.dateInHeader.length-1] <= 0 || this.dateInHeader[0] == 1 ){ //每天日期减7之后出现负数的处理
+
+                    if(this.dateInHeader[0] == 1 ){
+                        this.$set(this.dateInHeader,0,this.header.month + '月');
+
+                        if(this.header.month == 12){                    //年界限
+                            this.currentYear--;         
+                        }
+
+                        this.header.month = this.header.month - 1 || 12;
+                        return;
+                    }
+                    var lastMonthDay = this.getMonthDay( this.currentYear,lastMonth);
                     this.dateInHeader.forEach(function(item,index){
                         if( item == 1 ){
                             item = _this.header.month + '月';
+
+                            if(_this.header.month == 12){                   //年界限
+                                _this.currentYear--;            
+                            }
+
                             _this.$set(_this.dateInHeader,index,item);
                             _this.header.month = _this.header.month - 1 || 12 ;
                         }
@@ -249,25 +266,57 @@ export default{
                             if( value == 1 ){
                                 value = _this.header.month  + '月';
                                 _this.header.month = _this.header.month - 1 || 12 ;
+
+                                if(_this.header.month == 12){                   //年界限
+                                    _this.currentYear--;            
+                                }
+
                             }                                
                             _this.$set(_this.dateInHeader,index,value);
                         }
                     });
+
                 }
             }else if( direction < 0){        //向左滑动
-                this.dateInHeader.forEach(function(item) {
-                    item -= 7;
-                });
-                if( this.dateInHeader[0] < 0 ){
-                    var thisMonth = new Date().getMonth() + 1;
-                    var nextMonth = (new Date().getMonth()+2)%12 || 12 ;
-                    var lastMonthDay = this.getMonthDay( new Date().getFullYear(),nextMonth);
-                    this.dateInHeader.forEach(function(item){
-                        if(item <= 0 ){
-                            item += lastMonthDay;
-                        }
-                    });
+
+                var condition = this.dateInHeader.every( (item,index,array) => {
+                                    return typeof item == 'number';
+                                });
+                if( condition ){
+                    var thisMonth = this.header.month;
+                }else{
+                    var thisMonth = this.header.month ;
+                    this.header.month =  ( this.header.month + 1 ) % 12 || 12;
+                    
                 }
+
+                var thisMonthDayNum = this.getMonthDay(this.currentYear,thisMonth);
+                this.dateInHeader.forEach(function(item,index) {
+                    if(typeof item == 'string'){
+                        item = 1;
+                    }
+                    item += 7;
+                    _this.$set(_this.dateInHeader,index,item )
+                    if( item > thisMonthDayNum ){
+                        item -= thisMonthDayNum;
+                        _this.$set(_this.dateInHeader,index,item  );
+                        
+                    }
+                    /* if( index == 0 && item == 1){
+                        var temp = _this.header.month + 1 ;
+                        temp = ( temp % 12 ) || 12;
+                        _this.$set(_this.dateInHeader , 0 , temp + '月');
+                    } */
+                    if( item == 1){
+                        var temp = _this.header.month + 1 ;
+                        temp = ( temp % 12 ) || 12;
+                        _this.$set(_this.dateInHeader,index,temp  + '月' );
+                        if( temp == 1 ){
+                            _this.currentYear ++ ;  //年界限
+                        }
+                    }
+                });
+
             }
         },
         calculateMove(event){
