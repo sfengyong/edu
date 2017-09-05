@@ -57,7 +57,6 @@
         <transition name="show">
             <detail :info="info" :detailShow.sync='detailShow' v-show='detailShow'></detail>
         </transition>
-        
     </div>
 </template>
 <script>
@@ -77,6 +76,7 @@ export default{
             currentYear:"",
             //sevenDay:[[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}],[{},{},{},{},{},{},{}]]
             sevenDay:[[],[],[],[],[],[],[]],
+            sevenDayCache:[[],[],[],[],[],[],[]],
             info:"",
             detailShow:false,
             colorClass:{
@@ -96,8 +96,12 @@ export default{
     computed:{
         ...mapGetters({
             teacherInfo:'teacherInfo'
-
         })
+    },
+    watch:{
+        dateInHeader:function(newValue,oldValue){
+
+        }
     },
     filters:{
         time:function(value){
@@ -113,11 +117,28 @@ export default{
     mounted(){
         this.currentYear =  new Date().getFullYear();
         var _this = this;
-        _get("getArrangeClass",{workNumber:this.teacherInfo.workNumber},function(data){
-            _this.dataConversion(data.data);
+
+        _get("getAuditedClass",
+            {
+                workNumber:this.teacherInfo.workNumber,
+                startTime:new Date(this.getHeaderDate(-1)),
+                endTime:newDate(this.getHeaderDate(1))
+            },
+            (response) =>{
+                if(response.data != 'error')
+                    _this.dataConversion(response.data)
+            },
+            (error) =>{
+                
+            });
+
+        _get("getArrangeClass",{workNumber:this.teacherInfo.workNumber},function(response){
+            if(response.data != 'error')
+                _this.dataConversion(response.data);
         },function(){
 
         });
+
     },
     methods:{
         showHeader(){
@@ -221,6 +242,7 @@ export default{
             throttle(this.calculateMove,event,this,80);
         },
         changeHeader(direction){
+            this.sevenDayCache = cloneObject(this.sevenDay);    //将这个星期的课缓存起来
             var _this = this;
             if( direction > 0 ){             //向右滑动
                 var condition = this.dateInHeader.every((item,index,array) => {                 //判断当前出现的一排日期是否出现一号
@@ -334,6 +356,29 @@ export default{
             }else if ( Math.abs(this.moveXDistance) > Math.abs(this.moveYDistance) && this.moveXDistance < 0 ) {
 
                 this.changeHeader(-1)            //向左滑动
+            }
+        },
+        getHeaderDate(direction){
+            if(direction == 1){
+                if( typeof this.dateInHeader[0] == 'string'){
+                    return this.currentYear + "-" + this.dateInHeader[0].slice(0,this.dateInHeader[0].length -1) + '-' + '01';
+                }else{
+                    return this.currentYear + '-' + this.header.month + '-' + this.dateInHeader[0];
+                }
+            }else if(direction == -1){
+                var condition = this.dateInHeader.every( (item) =>{
+                    return typeof item == 'number';
+                });
+                if(condition){
+                    return this.currentYear + '-' + this.header.month + '-' + this.dateInHeader[6];
+                }else{
+                    if( typeof this.dateInHeader[6] == 'string'){
+                        return this.currentYear + '-' + (( this.header.month + 1 ) % 12 || 12) + '-' + '01';
+                    }else{
+                        return this.currentYear + '-' + (( this.header.month + 1 ) % 12 || 12) + '-' + this.dateInHeader[6];
+                    }
+                    
+                }
             }
         }
     }
