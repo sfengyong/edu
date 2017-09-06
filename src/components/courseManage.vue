@@ -61,7 +61,7 @@
 </template>
 <script>
     import { mapGetters } from 'vuex'
-    import { _get } from "../api/axios.js"
+    import { _get,_post } from "../api/axios.js"
     import { cloneObject } from "../util/cloneObject"
     import { throttle } from "../util/throttle"
     import detail from "./detail.vue"
@@ -100,12 +100,34 @@ export default{
     },
     watch:{
         dateInHeader:function(newValue,oldValue){
-
+            var _this = this;
+            _get("getAuditedClass",
+            {
+                workNumber:this.teacherInfo.workNumber,
+                startTime:new Date(this.getHeaderDate(1)),
+                endTime:new Date(this.getHeaderDate(-1))
+            },
+            (response) =>{
+                for( var i = 0 ; i < this.sevenDay.length ; i++ ){
+                    this.sevenDay[i].splice(0,this.sevenDay[i].length);
+                }
+                if(response.data != 'error')
+                    _this.dataConversion(response.data);
+            },
+            (error) =>{
+                
+            });
+            _get("getArrangeClass",{workNumber:this.teacherInfo.workNumber},function(response){
+                if(response.data != 'error')
+                    _this.dataConversion(response.data);
+            },function(){
+            });
         }
     },
     filters:{
         time:function(value){
-            return value.slice(0,2) + ":" + value.slice(2);
+            if(value)
+                return value.slice(0,2) + ":" + value.slice(2);
         }
     },
     components:{
@@ -117,12 +139,11 @@ export default{
     mounted(){
         this.currentYear =  new Date().getFullYear();
         var _this = this;
-
         _get("getAuditedClass",
             {
                 workNumber:this.teacherInfo.workNumber,
-                startTime:new Date(this.getHeaderDate(-1)),
-                endTime:newDate(this.getHeaderDate(1))
+                startTime:new Date(this.getHeaderDate(1)),
+                endTime:new Date(this.getHeaderDate(-1))
             },
             (response) =>{
                 if(response.data != 'error')
@@ -136,7 +157,6 @@ export default{
             if(response.data != 'error')
                 _this.dataConversion(response.data);
         },function(){
-
         });
 
     },
@@ -219,7 +239,7 @@ export default{
                 var index = this.dateInHeader.indexOf(data[i].day);//判断当前读取的记录对应着表头哪一列
 
                 if(index == -1 && data[i].day == 1){
-                    var index = this.dateInHeader.indexOf(this.header.month+1+'月');
+                    index = this.dateInHeader.indexOf( ((this.header.month+1)%12 || 12) +'月');
                 }
                 if(index != -1){
                     this.judgmentTime(index,data[i]);
@@ -227,14 +247,14 @@ export default{
             }
         },
         judgmentTime(index,data){     //判断每节课的开始时间，以确定它填在某一列的哪一行
-            this.sevenDay[index].push(data);
+            this.$set(this.sevenDay[index],this.sevenDay[index].length,data);
         },
         transferData(item){
             this.info = item;
             this.detailShow = true;
         },
         touch(event){
-            event.preventDefault();
+/*             event.preventDefault(); */
             this.touchStartX = event.changedTouches[0].pageX;
             this.touchStartY = event.changedTouches[0].pageY;
         },
@@ -342,7 +362,7 @@ export default{
             }
         },
         calculateMove(event){
-            event.preventDefault();
+           /*  event.preventDefault(); */
 
             this.touchEndX = event.changedTouches[0].pageX;
             this.touchEndY = event.changedTouches[0].pageY;

@@ -5,12 +5,15 @@ import axios from 'axios'
 import { HOST_CONFIG } from "./config"
 var instance = axios.create({
     baseURL: HOST_CONFIG.host,
+    headers: {'X-Requested-With': 'XMLHttpRequest'},    
     timeout: 1000
 });
-export const _get = ( url ,params,okCallback,errorCallback)=>{
-    instance.get(url,params)
-        .then(okCallback)
-        .catch(errorCallback)
+export const _get = ( url ,data,okCallback,errorCallback)=>{
+    instance.get(url,{
+        params:data
+    })
+    .then(okCallback)
+    .catch(errorCallback)
 }
 
 export const _post = ( url ,data,okCallback,errorCallback)=>{
