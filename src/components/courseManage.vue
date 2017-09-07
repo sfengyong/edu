@@ -100,16 +100,17 @@ export default{
     },
     watch:{
         dateInHeader:function(newValue,oldValue){
-            var _this = this;
-            _get("getAuditedClass",
+            throttle(this.getDataFromBackEnd,null,this,80);
+            /* var _this = this; */
+            /* _get("getAuditedClass",
             {
                 workNumber:this.teacherInfo.workNumber,
                 startTime:new Date(this.getHeaderDate(1)),
                 endTime:new Date(this.getHeaderDate(-1))
             },
             (response) =>{
-                for( var i = 0 ; i < this.sevenDay.length ; i++ ){
-                    this.sevenDay[i].splice(0,this.sevenDay[i].length);
+                for( var i = 0 ; i < _this.sevenDay.length ; i++ ){
+                    _this.sevenDay[i].splice(0,_this.sevenDay[i].length);
                 }
                 if(response.data != 'error')
                     _this.dataConversion(response.data);
@@ -121,7 +122,7 @@ export default{
                 if(response.data != 'error')
                     _this.dataConversion(response.data);
             },function(){
-            });
+            }); */
         }
     },
     filters:{
@@ -138,14 +139,18 @@ export default{
     },
     mounted(){
         this.currentYear =  new Date().getFullYear();
-        var _this = this;
-        _get("getAuditedClass",
+        /* var _this = this; */
+        throttle(this.getDataFromBackEnd,null,this,80);
+        /* _get("getAuditedClass",
             {
                 workNumber:this.teacherInfo.workNumber,
                 startTime:new Date(this.getHeaderDate(1)),
                 endTime:new Date(this.getHeaderDate(-1))
             },
             (response) =>{
+                for( var i = 0 ; i < _this.sevenDay.length ; i++ ){
+                    _this.sevenDay[i].splice(0,_this.sevenDay[i].length);
+                }
                 if(response.data != 'error')
                     _this.dataConversion(response.data)
             },
@@ -157,10 +162,34 @@ export default{
             if(response.data != 'error')
                 _this.dataConversion(response.data);
         },function(){
-        });
-
+        }); */
     },
     methods:{
+        getDataFromBackEnd(){
+            var _this = this;
+            _get("getAuditedClass",
+            {
+                workNumber:this.teacherInfo.workNumber,
+                startTime:new Date(this.getHeaderDate(1)),
+                endTime:new Date(this.getHeaderDate(-1))
+            },
+            (response) =>{
+                for( var i = 0 ; i < _this.sevenDay.length ; i++ ){
+                    _this.sevenDay[i].splice(0,_this.sevenDay[i].length);
+                }
+                if(response.data != 'error')
+                    _this.dataConversion(response.data)
+            },
+            (error) =>{
+                
+            });
+            _get("getArrangeClass",{workNumber:this.teacherInfo.workNumber},
+            function(response){
+                if(response.data != 'error')
+                    _this.dataConversion(response.data);
+            },function(){
+            });
+        },
         showHeader(){
             //处理头部日期显示
             var today = new Date();
@@ -445,6 +474,11 @@ export default{
         top: 1.92rem;
         left: 0;
         background: #f3f3f6;
+        width: 100%;
+        height: calc( 100% - 1.92rem );
+        .el-col-3{
+            min-height: 100%;
+        }
         .table{
             box-sizing: border-box;
             text-align: center;

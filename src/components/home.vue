@@ -33,6 +33,7 @@
     </div>
 </template>
 <script>
+    import { Swipe, SwipeItem } from 'mint-ui'
 export default{
     name:'home',
     data(){
