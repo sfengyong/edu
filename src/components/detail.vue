@@ -38,7 +38,7 @@
             </div>
             <div class="item" @click="showMtPopup()">
                 <span class="infoTitle">实际课时</span><!-- 
-             --><span class="infoContent">{{info.realCourseTime}}</span>
+             --><span class="infoContent">{{realCourseTime}}</span>
                 <transition name="show">
                     <mt-popup
                         v-model="popupVisible"
@@ -127,7 +127,7 @@ export default{
                 }
             ],
             returnWay:"",           //回访方式，为同一个学生每上三次课要求老师进行电话回访取代微信回访
-            //realCourseTime:'',
+            realCourseTime:'',
             remark:"",//备注
             photoEvidenceUrl:"",
             photoEvidencePath:"",//拍照取证地址路径
@@ -186,24 +186,44 @@ export default{
             }
         }
     },
+    filter:{
+        explain:function(value){
+            if(value == -1 ){
+                return "学生请假";
+            }else if(value == -2 ){
+                return "老师请假";
+            }else{
+                return value;
+            }
+        }
+    },
     components:{
         loading:loading
     },
+    mounted(){
+        this.realCourseTime = this.info.realCourseTime;
+    },
     methods:{
         showMtPopup(){                                                          //点击实际课时时弹出输入框
-            if(!this.info.realCourseTime || this.info.status=='未通过')       //若实际课时已经有内容，则不弹出
+            if( this.info.status == '未审核' || this.info.status=='未通过')       //若实际课时已经有内容，则不弹出
                 this.popupVisible = true;
         },
-        onValuesChange(picker,values){
-            if(this.info)
-                this.info.realCourseTime = values[0];
+        onValuesChange(picker,values){  //实际课时
+            this.realCourseTime = values[0];
         },
         cancel(){                               //实际课时输入框的取消按钮
             this.popupVisible = false;
         },
         confirm(){                              //实际课时输入框的确认按钮
-            if(!this.realCourseTime)
-                this.info.realCourseTime=1.5;
+            if(!this.realCourseTime){
+                this.realCourseTime = 1.5;
+                this.info.realCourseTime = 1.5;
+            }
+                
+            if( this.realCourseTime == '学生请假')
+                this.info.realCourseTime = -1;
+            if( this.realCourseTime == '教师请假')
+                this.info.realCourseTime = -2;
             this.popupVisible=false;
         },
         closeDetail(){                              //关闭当前详情页
@@ -321,35 +341,28 @@ export default{
     background: #f3f5f5;
     .courseName{
         width: 100%;
-        /* font-size: 1.6rem; */
-        font-size:0.256rem;
+        font-size:0.456rem;
         box-sizing: border-box;
-        /* padding: 0.4rem; */
-        padding:0.064rem;
+        padding:0.16rem 0.37rem 0.16rem 0.2rem;
     }
     .courseDetail{
         .item{
             background: white;
-            /* height: 4.4rem; */
-            height:0.704rem;
+            height:1.304rem;
             box-sizing: border-box;
-            /* padding: 1rem 2.3rem 1rem 1.2rem; */
-            padding:0.16rem 0.368rem 0.16rem 0.19rem;
-           /*  border-bottom: 0.1rem rgba(217,217,217,0.43) solid; */
+            padding:0.26rem 0.67rem 0.16rem 0.3rem;
             border-bottom:0.02rem rgba(217,217,217,0.43) solid;
             .infoTitle{
                 display: inline-block;
                 width: 25%;
-                /* font-size: 1.7rem; */
-                font-size: 0.272rem;
+                font-size: 0.456rem;
                 color: rgba(0,0,0,0.8);
             }
             .infoContent{
                 display: inline-block;
                 width:75%;
                 text-align: right;
-                /* font-size: 1.7rem; */
-                font-size: 0.272rem;
+                font-size: 0.456rem;
                 color: rgba(0,0,0,0.8);
                 input{
                     border: none;
@@ -357,20 +370,16 @@ export default{
                     display: inline-block;
                     width: 100%;
                     height: 100%;
-                    /* font-size: 1.7rem; */
-                    foint-size:0.272rem;
+                    foint-size:0.456rem;
                 }
                 
             }
             .mint-popup{
-                /* width: 20rem; */
                 width: 3.2rem;
                 text-align: center;
                 span{
-                    /* font-size: 1.8rem; */
                     font-size:0.29rem;
                     display: inline-block;
-                    /* margin-top: 0.5rem; */
                     margin-top:0.08rem;
                 }
                 .mint-button{
@@ -390,27 +399,22 @@ export default{
             margin-right:1.2rem;
         }
         .realClass{
-            /* height: 3.8rem;
-            padding: 1rem 2.3rem 1rem 1.2rem; */
             height: 0.61rem;
             padding:0.16rem 0.368rem 0.16rem 0.19rem;
         }
         .el-row{
             background: white;
             box-sizing: border-box;
-            /* padding:1.5rem 1rem;
-            border-bottom:0.1rem solid rgba(217,217,217,0.43); */
-            padding: 0.24rem 0.16rem;
+            height: 2rem;
+            padding:0.46rem 0.67rem 0.16rem 0.3rem;
             border-bottom: 0.02rem solid rgba(217, 217, 217, 0.43);
             .el-col{
-                /* font-size:1.6rem; */
-                font-size:0.26rem;
+                font-size:0.456rem;
                 .avatar-uploader .el-upload {
                     border: 1px dashed rgba(217,217,217,0.43);
                     border-radius: 6px;
                     cursor: pointer;
                     position: relative;
-                    /* right: 0.2rem; */
                     right: 0.03rem;
                     overflow: hidden;
                 }
@@ -420,22 +424,16 @@ export default{
                 .avatar-uploader-icon {
                     font-size: 28px;
                     color: #8c939d;
-                    /* width: 3.8rem;
-                    height: 3.8rem;
-                    line-height: 3.8rem; */
-                    width: 0.61rem;
-                    height: 0.61rem;
-                    line-height: 0.61rem;
+                    width: 1.01rem;
+                    height: 1.01rem;
+                    line-height: 1.01rem;
                     text-align: center;
                 }
                 .avatar {
-                    /* width: 3.8rem;
-                    height: 3.8rem; */
-                    width: 0.61rem;
-                    height: 0.61rem;
+                    width: 1.01rem;
+                    height: 1.01rem;
                     display: block;
                 }
-
             }
         }
         .commit{

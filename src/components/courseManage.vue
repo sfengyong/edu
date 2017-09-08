@@ -50,6 +50,7 @@
                     <el-col :span="24"  class="table color" @click.native="transferData(item)" :class="[colorClass[item.status]]">
                         <div >{{item.start | time }}</div>
                         <div >{{item.courseName}}</div>
+                        <div>{{item.studentName}}</div>
                     </el-col>
                 </el-row>
             </el-col>
@@ -101,28 +102,6 @@ export default{
     watch:{
         dateInHeader:function(newValue,oldValue){
             throttle(this.getDataFromBackEnd,null,this,80);
-            /* var _this = this; */
-            /* _get("getAuditedClass",
-            {
-                workNumber:this.teacherInfo.workNumber,
-                startTime:new Date(this.getHeaderDate(1)),
-                endTime:new Date(this.getHeaderDate(-1))
-            },
-            (response) =>{
-                for( var i = 0 ; i < _this.sevenDay.length ; i++ ){
-                    _this.sevenDay[i].splice(0,_this.sevenDay[i].length);
-                }
-                if(response.data != 'error')
-                    _this.dataConversion(response.data);
-            },
-            (error) =>{
-                
-            });
-            _get("getArrangeClass",{workNumber:this.teacherInfo.workNumber},function(response){
-                if(response.data != 'error')
-                    _this.dataConversion(response.data);
-            },function(){
-            }); */
         }
     },
     filters:{
@@ -139,30 +118,7 @@ export default{
     },
     mounted(){
         this.currentYear =  new Date().getFullYear();
-        /* var _this = this; */
         throttle(this.getDataFromBackEnd,null,this,80);
-        /* _get("getAuditedClass",
-            {
-                workNumber:this.teacherInfo.workNumber,
-                startTime:new Date(this.getHeaderDate(1)),
-                endTime:new Date(this.getHeaderDate(-1))
-            },
-            (response) =>{
-                for( var i = 0 ; i < _this.sevenDay.length ; i++ ){
-                    _this.sevenDay[i].splice(0,_this.sevenDay[i].length);
-                }
-                if(response.data != 'error')
-                    _this.dataConversion(response.data)
-            },
-            (error) =>{
-                
-            });
-
-        _get("getArrangeClass",{workNumber:this.teacherInfo.workNumber},function(response){
-            if(response.data != 'error')
-                _this.dataConversion(response.data);
-        },function(){
-        }); */
     },
     methods:{
         getDataFromBackEnd(){
@@ -178,16 +134,16 @@ export default{
                     _this.sevenDay[i].splice(0,_this.sevenDay[i].length);
                 }
                 if(response.data != 'error')
-                    _this.dataConversion(response.data)
+                    _this.dataConversion(response.data);
+                    _get("getArrangeClass",{workNumber:this.teacherInfo.workNumber},
+                    function(response){
+                        if(response.data != 'error')
+                            _this.dataConversion(response.data);
+                    },function(){
+                    });
             },
             (error) =>{
                 
-            });
-            _get("getArrangeClass",{workNumber:this.teacherInfo.workNumber},
-            function(response){
-                if(response.data != 'error')
-                    _this.dataConversion(response.data);
-            },function(){
             });
         },
         showHeader(){
@@ -283,7 +239,6 @@ export default{
             this.detailShow = true;
         },
         touch(event){
-/*             event.preventDefault(); */
             this.touchStartX = event.changedTouches[0].pageX;
             this.touchStartY = event.changedTouches[0].pageY;
         },
@@ -391,7 +346,6 @@ export default{
             }
         },
         calculateMove(event){
-           /*  event.preventDefault(); */
 
             this.touchEndX = event.changedTouches[0].pageX;
             this.touchEndY = event.changedTouches[0].pageY;
@@ -440,7 +394,6 @@ export default{
     height: 100%;
     .tableHeader {
         top: 1rem;
-        /* top: 3.3rem; */
         right: 0;
         left: 0;
         position: fixed;
@@ -482,19 +435,13 @@ export default{
         .table{
             box-sizing: border-box;
             text-align: center;
-            /* height: 1.28rem; */
             height: 2.65rem;
             padding-top:0.16rem;
-            /* height: 8rem;
-            padding-top: 1rem; */
             background: white;
-            /* border-right: 0.1rem solid rgba(243, 245, 245, 0.74);
-            border-bottom: 0.1rem solid rgba(243, 245, 245, 0.74); */
             border-right:0.02rem solid rgba(243, 245, 245, 0.74);
             border-bottom:0.02rem solid rgba(243, 245, 245, 0.74);
         }
         .index{
-            /* padding-top: 2.2rem; */
             padding-top: 0.352rem;
             background: #f3f3f6;
         }
