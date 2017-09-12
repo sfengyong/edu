@@ -13,11 +13,18 @@ const state = {
 
 const mutations = {
 
-    [LOGIN](state,token){
-        state.token = token;
-        state.login = true;
-        state.logout = false;
-        saveToStorage("token",token);
+    [LOGIN](state,data){
+        if(data.success){
+            state.token = data.token;
+            state.login = true;
+            state.logout = false;
+            saveToStorage("token",data.token);
+        }else{
+            state.token = {};
+            state.login = false;
+            state.logout = true;
+            clearStorage("token");
+        }
     },
 
     [LOGOUT](state){
@@ -34,7 +41,8 @@ const actions = {
             "teacherLogin",
             data,
             response =>{
-                commit(LOGIN,response.data);
+                if(response)
+                    commit(LOGIN,response.data);
             },
             error =>{
                 console.log(error);
@@ -46,7 +54,7 @@ const actions = {
     getToken:({ commit })=>{
         const token = getFromStorage("token");
         if(token)
-            commit(LOGIN,JSON.parse(token));
+            commit(LOGIN,{success:true,token:token});
     }
 }
 

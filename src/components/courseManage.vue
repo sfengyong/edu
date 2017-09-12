@@ -39,7 +39,7 @@
                 <div class="day">六</div>
             </el-col>
         </el-row>
-        <el-row class="tableWrap"  @touchstart.native="touch($event)" @touchmove.native="move($event)">
+        <el-row class="tableWrap"  @touchstart.native="touch($event)" @touchmove.native.prevent="move($event)">
             <el-col :span="3">
                 <el-row v-for="item in 6">
                     <el-col :span="24"  class="table index">{{item}}</el-col>
@@ -106,8 +106,18 @@ export default{
     },
     filters:{
         time:function(value){
-            if(value)
-                return value.slice(0,2) + ":" + value.slice(2);
+            if(value){
+                value = value.split(":");
+                if(value[0].length == 1){
+                    value[0] = "0" + value[0];
+                }
+                if(value[1].length == 1){
+                    value[1] = "0" + value[1];
+                }
+                return value[0] + ":" + value[1];
+            }
+            else
+                return "";
         }
     },
     components:{
@@ -135,7 +145,12 @@ export default{
                 }
                 if(response.data != 'error')
                     _this.dataConversion(response.data);
-                    _get("getArrangeClass",{workNumber:this.teacherInfo.workNumber},
+                    _get("getArrangeClass",
+                    {
+                        workNumber:this.teacherInfo.workNumber,
+                        startTime:new Date(this.getHeaderDate(1)),
+                        endTime:new Date(this.getHeaderDate(-1))
+                    },
                     function(response){
                         if(response.data != 'error')
                             _this.dataConversion(response.data);
@@ -214,7 +229,7 @@ export default{
                 var date = new Date(data[i].startTime);
                 data[i].date = date.getMonth() + 1 + '月' + date.getDate() + '日';//某月某日
                 data[i].day = date.getDate();//具体日期
-                data[i].start = date.getHours().toString() + date.getMinutes().toString();
+                data[i].start = date.getHours().toString() +":"+ date.getMinutes().toString();
             }
             this.fillTable(data);
         },
@@ -413,12 +428,10 @@ export default{
                 padding-top:0.13rem;
             }
             .date{
-                /* font-size: 0.4rem; */
-                font-size: 0.064rem;
+                /* font-size: 0.064rem; */
             }
             .day{
-                /* font-size: 0.6rem; */
-                font-size: 0.09rem;
+               /*  font-size: 0.09rem; */
             }
         }
     }
@@ -428,7 +441,7 @@ export default{
         left: 0;
         background: #f3f3f6;
         width: 100%;
-        height: calc( 100% - 1.92rem );
+        min-height: calc( 100% - 1.92rem );
         .el-col-3{
             min-height: 100%;
         }

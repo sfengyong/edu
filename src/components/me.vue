@@ -6,7 +6,7 @@
         <div class="info">
             <div class="avator">
                 <img src="../image/loginbackground.jpg" alt="">
-                <span class="edit">编辑</span>
+<!--                 <span class="edit">编辑</span> -->
             </div>
             <div class="name">{{teacherInfo.name}}</div>
             <div class="position">主职位：教师</div>
@@ -76,6 +76,8 @@
     background: rgba(153, 153, 153, 0.12);
     header{
         width: 100%;
+        height: 1.1rem;
+        font-size:0.5rem;
         box-sizing: border-box;
         /* padding: 1rem; */
         padding:0.16rem;
@@ -91,8 +93,8 @@
             transform: translateY(-50%);
             /* right: 1.2rem;
             font-size: 2rem; */
-            right: 0.19rem;
-            font-size: 0.32rem;
+            right: 0.39rem;
+            font-size: 0.52rem;
         }
     }
     .info{
@@ -122,13 +124,14 @@
             /* margin-top: 1.5rem;
             font-size: 1.5rem; */
             margin-top: 0.24rem;
-            font-size: 0.24rem;
+            font-size: 0.54rem;
             color: rgba(0,0,0,0.8);
         }
         .position{
             /* font-size: 1rem; */
-            font-size: 0.16rem;
+            font-size: 0.36rem;
             color: rgba(0,0,0,0.8);
+            margin-top: 0.1rem; 
         }
     }
     .el-row{

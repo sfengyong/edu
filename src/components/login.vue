@@ -3,15 +3,15 @@
         <div class="loginWrap">
             <el-row>
                 <el-col :span="2" :offset="4"><span class="iconfont">&#xe601;</span></el-col>
-                <el-col :span="14"><el-input v-model="username" placeholder="请输入账号"></el-input></el-col>
+                <el-col :span="14" ><el-input v-model="workNumber" placeholder="请输入账号"></el-input></el-col>
             </el-row>
             <el-row>
                 <el-col :span="2" :offset="4"><span class="iconfont">&#xe63d;</span></el-col>
-                <el-col :span="14"><el-input v-model="password" placeholder="请输入密码" type="password"></el-input></el-col>
+                <el-col :span="14" ><el-input v-model="password" placeholder="请输入密码" type="password"></el-input></el-col>
             </el-row>
             <el-row>
                 <el-col :span="14" :offset="5">
-                    <el-button :loading="false" @click="Login()">登录</el-button>
+                    <el-button :loading="false" @click.native="Login()">登录</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -25,7 +25,7 @@
         name: 'login',
         data () {
             return {
-                username:'',
+                workNumber:'',
                 password:''
             }
         },
@@ -55,16 +55,17 @@
                 var _this = this;
                 new Promise(function (resolve,reject) {
                     _this.login({
-                        username:_this.username,
+                        workNumber:_this.workNumber,
                         password:_this.password
                     });
-                    if(_this.token)
-                        resolve(_this.token);
+                    if(_this.token){
+                        resolve(_this.workNumber);      
+                    }            
                     else
                         reject()
                 }).then(
-                    function (token) {
-                        _this.getTeacherInfo(token);
+                    function (workNumber) {
+                        _this.getTeacherInfo(workNumber);
                         _this.$router.push({path:"/main"});
                     },function () {
                         console.log("token is null")
@@ -87,10 +88,10 @@
             transform: translateY(-50%);
             .el-row{
                 /* margin-top: 1.2rem; */
-                margin-top: 0.2rem;
+                margin-top: 0.3rem;
                 .el-col{
                     span{
-                        font-size: 0.48rem;
+                        font-size: 0.88rem;
                         /* font-size: 3rem; */
                         color: rgba(255, 255, 255, 0.7);
                     }
@@ -99,18 +100,18 @@
                         border: none;
                         border-bottom: 1px solid #bfcbd9;
                         border-radius: 0px;
-                        margin-top: -0.45rem;
+                        margin-top: -0.05rem;
                         color:rgba(255, 255, 255, 0.7);
                         /* font-size:1.8rem; */
-                        font-size: 0.29rem;
+                        font-size: 0.49rem;
                     }
                     .el-button{
                         width: 100%;
                         /* padding: 0.7rem; */
-                        padding: 0.1rem;
+                        padding: 0.2rem;
                         background: rgba(255, 255, 255, 0);
                         span{
-                            font-size:0.16rem;
+                            font-size:0.49rem;
                             /* font-size: 1rem; */
                         }
                         &:focus{

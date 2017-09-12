@@ -11,22 +11,27 @@ const state = {
 
 const mutations = {
     [TEACHERINFO](state,teacherInfo){
+        console.log(teacherInfo)
         state.teacherInfo = teacherInfo;
         saveToStorage("teacherInfo",teacherInfo);
     }
 }
 
 const actions = {
-    getTeacherInfo:( { commit } , token) =>{
+    getTeacherInfo:( { commit },workNumber) =>{
         _get(
             "getTeacherInfo",
             {
-                token:token
+                workNumber:workNumber
             },
-            response =>{
-                commit(TEACHERINFO,response.data);
+            (response) =>{
+                console.log(response)
+                if(response){
+                    commit(TEACHERINFO,response.data);
+                }
+                    
             },
-            error =>{
+            (error) =>{
                 console.log(error);
             }
         )

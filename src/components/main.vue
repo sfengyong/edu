@@ -11,11 +11,9 @@
         <mt-tabbar v-model="currentComponent" fixed>
             <mt-tab-item id="home">
                 <div class="iconfont">&#xe640;</div>
-                首页
             </mt-tab-item>
             <mt-tab-item id="me">
                 <div class="iconfont">&#xe601;</div>
-                我的
             </mt-tab-item>
         </mt-tabbar>
     </div>
@@ -43,7 +41,11 @@
         position: relative;
         width: 100%;
         height: 100%;
-
+        .mint-tab-item{
+            .iconfont{
+                font-size: 0.7rem; 
+            }
+        }
         .mint-tab-container{
             width: 100%;
             height: 100%;
@@ -53,6 +55,7 @@
                 .mt-tab-container-item{
                     width: 100%;
                     height: 100%;
+                    
                 }
             }
         }

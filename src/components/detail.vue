@@ -143,10 +143,27 @@ export default{
     },
     filters:{
         time:function(value){
-            if(value)
-                return value.slice(0,2) + ":" + value.slice(2);
+            if(value){
+                value = value.split(":");
+                if(value[0].length == 1){
+                    value[0] = "0" + value[0];
+                }
+                if(value[1].length == 1){
+                    value[1] = "0" + value[1];
+                }
+                return value[0] + ":" + value[1];
+            }
             else
                 return "";
+        },
+        explain:function(value){
+            if(value == -1 ){
+                return "学生请假";
+            }else if(value == -2 ){
+                return "老师请假";
+            }else{
+                return value;
+            }
         }
     },
     watch:{
@@ -183,17 +200,6 @@ export default{
                             _this.$emit('update:detailShow', false);
                         },1000);
                     });
-            }
-        }
-    },
-    filter:{
-        explain:function(value){
-            if(value == -1 ){
-                return "学生请假";
-            }else if(value == -2 ){
-                return "老师请假";
-            }else{
-                return value;
             }
         }
     },

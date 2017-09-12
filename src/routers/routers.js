@@ -70,7 +70,7 @@ router.beforeEach(( to, from ,next ) =>{
     if( to.meta.requireLogin ){
         const login = store.getters.login;
         if(login){
-               store.dispatch('getTeacher');
+            store.dispatch('getTeacher');
             next();
         }
         else
