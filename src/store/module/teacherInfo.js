@@ -11,7 +11,6 @@ const state = {
 
 const mutations = {
     [TEACHERINFO](state,teacherInfo){
-        console.log(teacherInfo)
         state.teacherInfo = teacherInfo;
         saveToStorage("teacherInfo",teacherInfo);
     }
@@ -25,7 +24,6 @@ const actions = {
                 workNumber:workNumber
             },
             (response) =>{
-                console.log(response)
                 if(response){
                     commit(TEACHERINFO,response.data);
                 }

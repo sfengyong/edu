@@ -8,7 +8,9 @@ import store from "../store/"
 
 var instance = axios.create({
     baseURL: HOST_CONFIG.host,
-    headers: {'X-Requested-With': 'XMLHttpRequest'},   
+    timeout: 5000,
+    withCredentials: true, 
+    headers: {'X-Requested-With': 'XMLHttpRequest'}
 });
 
 instance.interceptors.response.use((response) => {
@@ -16,6 +18,7 @@ instance.interceptors.response.use((response) => {
         store.dispatch("logout");
         router.push({path:"/login"});
     }
+    return response;
 });
 
 export const _get = ( url ,data,okCallback,errorCallback)=>{

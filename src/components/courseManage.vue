@@ -39,7 +39,7 @@
                 <div class="day">六</div>
             </el-col>
         </el-row>
-        <el-row class="tableWrap"  @touchstart.native="touch($event)" @touchmove.native.prevent="move($event)">
+        <el-row class="tableWrap"  @touchstart.native="touch($event)" @touchmove.native="move($event)">
             <el-col :span="3">
                 <el-row v-for="item in 6">
                     <el-col :span="24"  class="table index">{{item}}</el-col>
@@ -372,7 +372,7 @@ export default{
 
                 this.changeHeader(1);            //向右滑动 
             }else if ( Math.abs(this.moveXDistance) > Math.abs(this.moveYDistance) && this.moveXDistance < 0 ) {
-
+                event.preventDefault();
                 this.changeHeader(-1)            //向左滑动
             }
         },

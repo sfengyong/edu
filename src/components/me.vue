@@ -6,7 +6,6 @@
         <div class="info">
             <div class="avator">
                 <img src="../image/loginbackground.jpg" alt="">
-<!--                 <span class="edit">编辑</span> -->
             </div>
             <div class="name">{{teacherInfo.name}}</div>
             <div class="position">主职位：教师</div>
@@ -24,7 +23,7 @@
             <el-col class="rol-textCenter" :span="3">
                 <i class="iconfont">&#xe602;</i>
             </el-col>
-            <el-col :span="21">
+            <el-col class="rol-border"  :span="21">
                 <span>关于我们</span>
                 <i class="iconfont right">&#xe603;</i>
             </el-col>

@@ -41,8 +41,7 @@ const actions = {
             "teacherLogin",
             data,
             response =>{
-                if(response)
-                    commit(LOGIN,response.data);
+                commit(LOGIN,response.data);
             },
             error =>{
                 console.log(error);
