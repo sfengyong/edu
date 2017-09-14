@@ -6,7 +6,7 @@
             </router-link>
             <mt-button icon="more" slot="right"></mt-button>
         </mt-header>
-        <div id="main" style="width: 600px;height:400px;"></div>
+        <div id="echarts" style="width: 400px;height:300px;"></div>
     </div>
 </template>
 <script>
@@ -21,23 +21,38 @@ export default{
     },
     mounted(){
         console.log(this.teacherInfo);
-    },
-    created(){
-        var myChart = echarts.init(document.getElementById('main'));
+        var myChart = echarts.init(document.getElementById('echarts'));
         // 绘制图表
         myChart.setOption({
+            color:['#26a2ff'],
             title: { text: '课消统计' },
-            tooltip: {},
-            xAxis: {
-                data: ["未结课时","已结课时","总课时"]
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
             },
-            yAxis: {},
+            legend:{
+                data:["销量"]
+            },
+            xAxis: {
+                type:'category',
+                data: ["未结课时","已结课时","总课时"],   
+                axisLabel:{
+                    margin:13
+                }
+            },
+            yAxis: {type : 'value'},
             series: [{
                 name: '销量',
                 type: 'bar',
-                data: [5, 20, 36, 10, 10, 20]
+                barWidth: '40%',
+                data: [this.teacherInfo.unpaidTime, this.teacherInfo.paidTime,this.teacherInfo.unpaidTime+this.teacherInfo.paidTime]
             }]
         });
+    },
+    created(){
+        
     }
 }
 </script>
