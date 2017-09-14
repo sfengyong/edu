@@ -17,7 +17,7 @@
                     </div>
                 </el-col>
                 <el-col :span="6">
-                    <div class="wrap">
+                    <div class="wrap" @click="classCount">
                         <div class="iconfont">&#xe600;</div>
                         <span class="name">课消统计</span>
                     </div>
@@ -44,6 +44,9 @@ export default{
     methods:{
         courseManage(){
             this.$router.push({path:"/courseManage"})
+        },
+        classCount(){
+            this.$router.push({path:"/classCount"});
         }
     }
 }

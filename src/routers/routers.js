@@ -10,6 +10,7 @@ import courseManage from "../components/courseManage.vue"
 import detail from "../components/detail.vue"
 import accountSecurity from "../components/accountSecurity.vue"
 import changePassword from "../components/changePassword.vue"
+import classCount from  "../components/classCount.vue"
 
 import store from "../store/"
 
@@ -31,6 +32,13 @@ const router = new Router({
         {
             path:'/courseManage',
             component:courseManage,
+            meta: {
+                requireLogin: true
+            }
+        },
+        {
+            path:'/classCount',
+            component:classCount,
             meta: {
                 requireLogin: true
             }
