@@ -45,24 +45,27 @@
                     <el-col :span="24"  class="table index">{{item}}</el-col>
                 </el-row>
             </el-col>
-            <el-col :span="3"v-for="(day,dayIndex) in sevenDay">
-                <el-row v-for="(item,itemIndex) in day">
-                    <el-col :span="24"  class="table color" @click.native="transferData(item)" :class="[colorClass[item.status]]">
-                        <div >{{item.start | time }}</div>
-                        <div >{{item.courseName}}</div>
-                        <div>{{item.studentName}}</div>
-                    </el-col>
-                </el-row>
-            </el-col>
+                <el-col :span="3" v-for="(day,dayIndex) in sevenDay">
+                    <div style="display:inline-block;height:100%;">
+                        <el-row v-for="(item,itemIndex) in day">
+                            <el-col :span="24" class="table color" @click.native="transferData(item)" :class="[colorClass[item.status]]">
+                                <div>{{item.start | time }}</div>
+                                <div>{{item.courseName}}</div>
+                                <div>{{item.studentName}}</div>
+                            </el-col>
+                        </el-row>
+                    </div>
+                </el-col>
         </el-row>
         <transition name="show">
-            <detail :info="info" :detailShow.sync='detailShow' v-show='detailShow'></detail>
+            <detail :info="info" :detailShow.sync='detailShow' v-if='detailShow'></detail>
         </transition>
     </div>
 </template>
 <script>
     import { mapGetters } from 'vuex'
-    import { _get,_post } from "../api/axios.js"
+    import { _get } from "../api/axios.js"
+    import { GET_URL } from "../api/config"
     import { cloneObject } from "../util/cloneObject"
     import { throttle } from "../util/throttle"
     import detail from "./detail.vue"
@@ -133,7 +136,7 @@ export default{
     methods:{
         getDataFromBackEnd(){
             var _this = this;
-            _get("getAuditedClass",
+            _get(GET_URL.GETAUDITEDCLASS,    
             {
                 workNumber:this.teacherInfo.workNumber,
                 startTime:new Date(this.getHeaderDate(1)),
@@ -143,19 +146,21 @@ export default{
                 for( var i = 0 ; i < _this.sevenDay.length ; i++ ){
                     _this.sevenDay[i].splice(0,_this.sevenDay[i].length);
                 }
-                if(response.data != 'error')
+                if(response.data != 'error'){
                     _this.dataConversion(response.data);
-                    _get("getArrangeClass",
+                    _get(GET_URL.GETARRANGECLASS,
                     {
                         workNumber:this.teacherInfo.workNumber,
-                        startTime:new Date(this.getHeaderDate(1)),
-                        endTime:new Date(this.getHeaderDate(-1))
+                        startTime:new Date(_this.getHeaderDate(1)),
+                        endTime:new Date(_this.getHeaderDate(-1))
                     },
                     function(response){
                         if(response.data != 'error')
                             _this.dataConversion(response.data);
                     },function(){
                     });
+                }
+                    
             },
             (error) =>{
                 
@@ -212,15 +217,7 @@ export default{
             }
             return monthDay;
         },
-        showClass(){
-            this.$http.get("/getArrangeClass",{
-                workNumber:teacherInfo.workNumber
-            })
-                .then(function () {
 
-                }).catch(function () {
-            })
-        },
         detail(dayIndex,itemIndex){
             this.$router.push({path:"/detail"});
         },
@@ -442,9 +439,9 @@ export default{
         background: #f3f3f6;
         width: 100%;
         min-height: calc( 100% - 1.92rem );
-        .el-col-3{
+        /* .el-col-3{
             min-height: 100%;
-        }
+        } */
         .table{
             box-sizing: border-box;
             text-align: center;

@@ -55,25 +55,22 @@ export default{
     #home{
         width: 100%;
         height: 100%;
+        position: relative;
         header{
             width: 100%;
             height: 1.1rem;
             box-sizing: border-box;
             font-size:0.5rem;
-            /* padding: 1rem; */
             padding:0.16rem;
             text-align: center;
             position: relative;
             span{
                 font-size: 0.32rem;
-                /* font-size: 2rem; */
             }
             .iconfont{
                 position: absolute;
                 top: 50%;
                 transform: translateY(-50%);
-                /* right: 1.2rem; */
-                /* font-size: 2rem; */
                 right:0.39rem;
                 font-size:0.52rem;
             }
@@ -84,38 +81,29 @@ export default{
         .function{
             width: 100%;
             box-sizing: border-box;
-            /* padding: 1.3rem 2rem; */
             padding: 0.208rem 0.32rem;
-            /* border-top: 0.1rem solid #e5e6e6; */
             border-top:0.02rem solid #e5e6e6;
             .wrap{
                 text-align: center;
                 .iconfont{
                     font-size: 0.95rem;
-                    /* font-size: 2.8rem; */
                     color: #88b3c7;
                 }
                 .name{
                     font-size: 0.36rem;
-                    /* font-size: 1rem; */
                 }
             }
         }
         .announcement{
             width: 100%;
             margin-top: 1.6rem;
-            /* margin-top: 10rem; */
             .title{
                 width: 100%;
                 box-sizing:border-box;
                 padding: 0.15rem 0.32rem;
-                /* padding: 0.3rem 2rem; */
                 background: #fafafa;
-                /* border-top:0.1rem solid #e5e6e6;
-                 border-bottom:0.1rem solid #e5e6e6; */
                 border-top:0.02rem solid #e5e6e6;
                 border-bottom: 0.02rem solid #e5e6e6;
-                /* font-size: 1.5rem; */
                 font-size: 0.54rem;
 
             }

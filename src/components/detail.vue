@@ -6,7 +6,7 @@
             </router-link>
             <mt-button icon="more" slot="right"></mt-button>
         </mt-header>
-        <div class="courseName" >初二语文</div>
+        <div class="courseName" >{{info.courseName}}</div>
         <div class="courseDetail">
             <div class="item">
                 <span class="infoTitle">日期</span><!-- 
@@ -108,6 +108,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { _post , _get } from '../api/axios'
+import { POST_URL, GET_URL } from "../api/config"
 import { imageCompression } from "../util/imageCompression"
 import { tip } from "../util/tip"
 import loading from "./loading.vue"
@@ -166,12 +167,45 @@ export default{
             }
         }
     },
+    created(){
+        var _this = this;
+        _get(
+            GET_URL.GETCLASSCOUNT,
+            {
+                workNumber:this.teacherInfo.workNumber,
+                sno:this.info.sno
+            },
+            function(response){
+                if(typeof response.data.count == 'number'){
+                    if( (response.data.count+1) % 3 == 0 ){
+                        _this.returnWay = "电话回访";
+                        if(_this.info.status!='审核中' && _this.info.status!="已审核")
+                            tip("这次需要提交电话回访哦~","bottom",2500);
+                            
+                    }else{
+                        _this.returnWay = "微信回访";
+                    }
+                }else{
+                    tip("未知错误，请重试","bottom",1000);
+                    setTimeout(function(){
+                        _this.$emit('update:detailShow', false);
+                    },1000);
+                }                
+            },
+            function(error){
+                console.log(error);
+                tip("未知错误，请重试","bottom",1000);
+                setTimeout(function(){
+                    _this.$emit('update:detailShow', false);
+                },1000);
+            });
+    },
     watch:{
-        detailShow:function(newValue,oldValue){
+       /*  detailShow:function(newValue,oldValue){
             var _this = this;
             if(newValue){
                 _get(
-                    "getClassCount",
+                    GET_URL.GETCLASSCOUNT,
                     {
                         workNumber:this.teacherInfo.workNumber,
                         sno:this.info.sno
@@ -201,7 +235,7 @@ export default{
                         },1000);
                     });
             }
-        }
+        } */
     },
     components:{
         loading:loading
@@ -253,7 +287,7 @@ export default{
             var _this = this;
             imageCompression(file.file,function(base64){
                 _post(
-                    "photo/" + species,
+                    POST_URL.PHOTO + species,
                     {
                         base64:base64,
                         type:file.file.name.match(IMAGE_REG)[1]
@@ -292,7 +326,7 @@ export default{
                 status:'审核中'
             };
             _post(
-                "audit",
+                POST_URL.AUDIT,
                 data,
                 function(res){
                    if(res.data == 'successful'){

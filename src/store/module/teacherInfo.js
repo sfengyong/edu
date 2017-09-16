@@ -2,6 +2,7 @@
  * Created by Administrator on 2017/8/7.
  */
 import { _get } from "../../api/axios"
+import { GET_URL } from "../../api/config"
 import { TEACHERINFO } from "../mutations-type"
 import { saveToStorage,getFromStorage } from "../../util/dealStorage"
 
@@ -19,7 +20,7 @@ const mutations = {
 const actions = {
     getTeacherInfo:( { commit },workNumber) =>{
         _get(
-            "getTeacherInfo",
+            GET_URL.GETTEACHERINFO,
             {
                 workNumber:workNumber
             },

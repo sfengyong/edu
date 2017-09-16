@@ -59,13 +59,6 @@ const router = new Router({
                 }
             }]
         },
-        /* {
-            path:"/detail",
-            component:detail,
-            meta:{
-                requireLogin:true
-            }
-        }, */
         {
             path:'*',
             redirect:'/login'

@@ -3,6 +3,7 @@
  */
 import { clearStorage , saveToStorage ,getFromStorage } from "../../util/dealStorage"
 import { _post } from "../../api/axios"
+import { POST_URL } from "../../api/config"
 import { LOGIN ,LOGOUT } from "../mutations-type"
 
 const state = {
@@ -14,46 +15,45 @@ const state = {
 const mutations = {
 
     [LOGIN](state,data){
-        if(data.success){
-            state.token = data.token;
-            state.login = true;
-            state.logout = false;
-            saveToStorage("token",data.token);
-        }else{
-            state.token = {};
-            state.login = false;
-            state.logout = true;
-            clearStorage("token");
-        }
+        state.token = data.token;
+        state.login = true;
+        state.logout = false;
     },
 
     [LOGOUT](state){
         state.token = {};
         state.login = false;
         state.logout = true;
-        clearStorage("token");
     }
 }
 
 const actions = {
     login:( { commit },data ) =>{
         _post(
-            "teacherLogin",
+            POST_URL.TEACHERLOGIN,
             data,
             response =>{
-                commit(LOGIN,response.data);
+                if(response.data.success){
+                    saveToStorage("token",response.data.token);
+                    commit(LOGIN,response.data);
+                }else{
+                    clearStorage("token");
+                    commit(LOGOUT);
+                }
             },
             error =>{
                 console.log(error);
             })
     },
     logout:( { commit } ) =>{
+        clearStorage("token");
+        clearStorage("teacherInfo");
         commit(LOGOUT);
     },
     getToken:({ commit })=>{
         const token = getFromStorage("token");
         if(token)
-            commit(LOGIN,{success:true,token:token});
+            commit(LOGIN,{token:token});
     }
 }
 

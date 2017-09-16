@@ -42,6 +42,7 @@
         watch:{
             loginState:function (newVal,oldVal) {
                 if(newVal){
+                    this.getTeacherInfo(this.workNumber);
                     this.$router.replace({ path: "/main"});
                 }
             }
@@ -53,23 +54,27 @@
             ]),
             Login:function(){
                 var _this = this;
-                new Promise(function (resolve,reject) {
+                this.login({
+                        workNumber:this.workNumber,
+                        password:this.password
+                    });
+
+                /* new Promise(function (resolve,reject) {
                     _this.login({
                         workNumber:_this.workNumber,
                         password:_this.password
                     });
-                    if(_this.token){
-                        resolve(_this.workNumber);      
-                    }            
+                    if(_this.token)
+                        resolve(_this.workNumber);                 
                     else
-                        reject()
-                }).then(
-                    function (workNumber) {
+                        reject();
+                }).then( */
+                    /* (workNumber)=>{
                         _this.getTeacherInfo(workNumber);
                         _this.$router.push({path:"/main"});
-                    },function () {
+                    },( )=>{
                         console.log("token is null")
-                    })
+                    }) */
 
             }
         }

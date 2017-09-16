@@ -5,7 +5,7 @@ import Cookies from "js-cookie"
 
 export const saveToStorage = (type,data) =>{
     if( type == 'token' ){
-        Cookies.set('token', data);
+        Cookies.set('Admin-Token', data);
     }else{
         const localStorage = window.localStorage;
         try{
@@ -19,7 +19,7 @@ export const saveToStorage = (type,data) =>{
 
 export const clearStorage = (type)=>{
     if( type == "token"){
-        Cookies.remove('token');
+        Cookies.remove('Admin-Token');
     }else{
         const localStorage = window.localStorage;
         try{
@@ -36,7 +36,7 @@ export const clearStorage = (type)=>{
 
 export  const getFromStorage = (type)=>{
     if( type == 'token'){
-        Cookies.get('token');
+        return Cookies.get('Admin-Token');
     }else{
         const localStorage = window.localStorage;
         try{
