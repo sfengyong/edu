@@ -4,9 +4,9 @@
             <i class="iconfont" slot="right">&#xe73d;</i>
         </mt-header>
         <mt-swipe :show-indicators="false">
-            <mt-swipe-item>1</mt-swipe-item>
-            <mt-swipe-item>2</mt-swipe-item>
-            <mt-swipe-item>3</mt-swipe-item>
+            <mt-swipe-item><img src="../image/swipe-1.jpg" alt=""></mt-swipe-item>
+            <mt-swipe-item><img src="../image/swipe-2.jpg" alt=""></mt-swipe-item>
+            <mt-swipe-item><img src="../image/swipe-3.jpg" alt=""></mt-swipe-item>
         </mt-swipe>
         <div class="function">
             <el-row :gutter="10">
@@ -76,7 +76,11 @@ export default{
             }
         }
         .mint-swipe{
-            height: 25%;
+            height: 3.5rem;
+            img{
+                width:100%;
+                height: 100%;
+            }
         }
         .function{
             width: 100%;

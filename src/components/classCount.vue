@@ -10,7 +10,7 @@
     </div>
 </template>
 <script>
-import { mapGetters }  from 'vuex'
+import { mapGetters,mapActions }  from 'vuex'
 import  echarts from 'echarts/lib/echarts';
 require('echarts/lib/chart/bar');
 export default{
@@ -19,8 +19,11 @@ export default{
             teacherInfo:'teacherInfo'
         })
     },
+    created(){
+        this.getTeacherInfo(this.teacherInfo.workNumber);
+    },
     mounted(){
-        console.log(this.teacherInfo);
+
         var myChart = echarts.init(document.getElementById('echarts'));
         // 绘制图表
         myChart.setOption({
@@ -51,8 +54,10 @@ export default{
             }]
         });
     },
-    created(){
-        
+    methods:{
+        ...mapActions([
+                'getTeacherInfo'
+            ]),
     }
 }
 </script>

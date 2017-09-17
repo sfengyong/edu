@@ -38,7 +38,7 @@
             </div>
             <div class="item" @click="showMtPopup()">
                 <span class="infoTitle">实际课时</span><!-- 
-             --><span class="infoContent">{{realCourseTime}}</span>
+             --><span class="infoContent">{{realCourseTime|explain}}</span>
                 <transition name="show">
                     <mt-popup
                         v-model="popupVisible"
@@ -169,7 +169,12 @@ export default{
     },
     created(){
         var _this = this;
-        _get(
+        if(this.info.threeTimes){
+            _this.returnWay = "电话回访";
+            if(_this.info.status!='审核中' && _this.info.status!="已审核")
+                tip("这次需要提交电话回访哦~","bottom",2500);
+        }else{
+            _get(
             GET_URL.GETCLASSCOUNT,
             {
                 workNumber:this.teacherInfo.workNumber,
@@ -199,51 +204,17 @@ export default{
                     _this.$emit('update:detailShow', false);
                 },1000);
             });
-    },
-    watch:{
-       /*  detailShow:function(newValue,oldValue){
-            var _this = this;
-            if(newValue){
-                _get(
-                    GET_URL.GETCLASSCOUNT,
-                    {
-                        workNumber:this.teacherInfo.workNumber,
-                        sno:this.info.sno
-                    },
-                    function(response){
-                        if(typeof response.data.count == 'number'){
-                            if( (response.data.count+1) % 3 == 0 ){
-                                _this.returnWay = "电话回访";
-                                if(_this.info.status!='审核中' && _this.info.status!="已审核")
-                                    tip("这次需要提交电话回访哦~","bottom",2500);
-                                    
-                            }else{
-                                _this.returnWay = "微信回访";
-                            }
-                        }else{
-                            tip("未知错误，请重试","bottom",1000);
-                            setTimeout(function(){
-                                _this.$emit('update:detailShow', false);
-                            },1000);
-                        }                
-                    },
-                    function(error){
-                        console.log(error);
-                        tip("未知错误，请重试","bottom",1000);
-                        setTimeout(function(){
-                            _this.$emit('update:detailShow', false);
-                        },1000);
-                    });
-            }
-        } */
+        }
+        
     },
     components:{
         loading:loading
     },
+
     mounted(){
         this.realCourseTime = this.info.realCourseTime;
     },
-    methods:{
+    methods:{    
         showMtPopup(){                                                          //点击实际课时时弹出输入框
             if( this.info.status == '未审核' || this.info.status=='未通过')       //若实际课时已经有内容，则不弹出
                 this.popupVisible = true;
@@ -252,6 +223,8 @@ export default{
             this.realCourseTime = values[0];
         },
         cancel(){                               //实际课时输入框的取消按钮
+            this.realCourseTime = "",
+            this.info.realCourseTime = "",
             this.popupVisible = false;
         },
         confirm(){                              //实际课时输入框的确认按钮
@@ -260,16 +233,21 @@ export default{
                 this.info.realCourseTime = 1.5;
             }
                 
-            if( this.realCourseTime == '学生请假')
-                this.info.realCourseTime = -1;
-            if( this.realCourseTime == '教师请假')
-                this.info.realCourseTime = -2;
+            if( this.realCourseTime == '学生请假'){
+                this.info.realCourseTime = 0;
+                this.remark += "(学生请假)";
+            }
+                
+            if( this.realCourseTime == '教师请假'){
+                this.info.realCourseTime = 0;
+                this.remark += '(教师请假)';
+            }
+                
             this.popupVisible=false;
         },
         closeDetail(){                              //关闭当前详情页
             this.$emit('update:detailShow', false);
         },
-        
         showPhotoEvidence(file) {                   //上传图片后显示预览图
             this.photoEvidenceUrl = URL.createObjectURL(file.raw);
         },
@@ -323,7 +301,8 @@ export default{
                 remark:this.remark,
                 photoEvidencePath:this.photoEvidencePath,
                 returnVisitPath:this.returnVisitPath,
-                status:'审核中'
+                status:'审核中',
+                threeTimes:this.returnWay == '电话回访'
             };
             _post(
                 POST_URL.AUDIT,
@@ -333,7 +312,10 @@ export default{
                         _this.info.status = '审核中';
                         _this.loading = false;               //关闭加载动画
                         tip("提交成功","middle",1000,"icon-xiaolian");
-                        setTimeout(function(){
+                        //提交成功之后清楚输入内容
+                        _this.realCourseTime = "",  
+                        _this.remark = "",
+                        setTimeout(function(){      //关闭当前详情页
                             _this.$emit('update:detailShow', false);
                         },1000)
                     }else{
@@ -353,22 +335,14 @@ export default{
             this.tip('提交失败',"middle",1000,"icon-cry");
         },
         commit(){
-            if(!this.info.realCourseTime){
+            if(this.info.realCourseTime === ""){
                 tip("请完善信息","middle",1000,"icon-qinwen-")
                 return;
             } 
-        this.loading = true;                //打开加载动画
-           this.$refs.photoEvidence.submit();
-        },
-        /* tip(mes,place,time,icon){
-            Toast({
-                message: mes,
-                iconClass: icon =="" ? "" : icon + " " + 'iconfont'  ,
-                position:place,
-                duration:time
-            });
-        } */
-    }
+            this.loading = true;                //打开加载动画
+            this.$refs.photoEvidence.submit();
+            },
+        }
 }
 </script>
 <style lang="scss" rel="stylesheet/scss">
@@ -415,10 +389,10 @@ export default{
                 
             }
             .mint-popup{
-                width: 3.2rem;
+                width: 5.2rem;
                 text-align: center;
                 span{
-                    font-size:0.29rem;
+                    font-size:0.49rem;
                     display: inline-block;
                     margin-top:0.08rem;
                 }
