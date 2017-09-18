@@ -5,6 +5,7 @@ import { clearStorage , saveToStorage ,getFromStorage } from "../../util/dealSto
 import { _post } from "../../api/axios"
 import { POST_URL } from "../../api/config"
 import { LOGIN ,LOGOUT } from "../mutations-type"
+import { tip } from "../../util/tip"
 
 const state = {
     token:{},
@@ -37,7 +38,7 @@ const actions = {
                     saveToStorage("token",response.data.token);
                     commit(LOGIN,response.data);
                 }else{
-                    clearStorage("token");
+                    tip("登录失败","middle",2500);
                     commit(LOGOUT);
                 }
             },
@@ -49,6 +50,7 @@ const actions = {
         clearStorage("token");
         clearStorage("teacherInfo");
         commit(LOGOUT);
+        tip("请重新登录","middle",2500);
     },
     getToken:({ commit })=>{
         const token = getFromStorage("token");

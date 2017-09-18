@@ -15,7 +15,7 @@
                 <i class="iconfont">&#xe60a;</i>
             </el-col>
             <el-col class="rol-border" :span="21">
-                <span>我要吐槽</span>
+                <span>建议反馈</span>
                 <i class="iconfont right">&#xe603;</i>
             </el-col>
         </el-row>

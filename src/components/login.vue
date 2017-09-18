@@ -58,24 +58,6 @@
                         workNumber:this.workNumber,
                         password:this.password
                     });
-
-                /* new Promise(function (resolve,reject) {
-                    _this.login({
-                        workNumber:_this.workNumber,
-                        password:_this.password
-                    });
-                    if(_this.token)
-                        resolve(_this.workNumber);                 
-                    else
-                        reject();
-                }).then( */
-                    /* (workNumber)=>{
-                        _this.getTeacherInfo(workNumber);
-                        _this.$router.push({path:"/main"});
-                    },( )=>{
-                        console.log("token is null")
-                    }) */
-
             }
         }
     }

@@ -121,7 +121,7 @@ export default{
             slots: [
                 {
                     flex: 1,
-                    values: [1, 1.5, 2, 2.5, 3, '学生请假','老师请假'],
+                    values: [0,0.5,1, 1.5, 2, 2.5, 3, '学生请假','老师请假'],
                     className: 'slot1',
                     defaultIndex:2,
                     textAlign: 'center'
@@ -170,40 +170,42 @@ export default{
     created(){
         var _this = this;
         if(this.info.threeTimes){
-            _this.returnWay = "电话回访";
-            if(_this.info.status!='审核中' && _this.info.status!="已审核")
+            this.returnWay = "电话回访";
+            if(this.info.status!='审核中' && this.info.status!="已审核")
                 tip("这次需要提交电话回访哦~","bottom",2500);
-        }else{
+        }else if(this.info.status != "未通过"){
             _get(
-            GET_URL.GETCLASSCOUNT,
-            {
-                workNumber:this.teacherInfo.workNumber,
-                sno:this.info.sno
-            },
-            function(response){
-                if(typeof response.data.count == 'number'){
-                    if( (response.data.count+1) % 3 == 0 ){
-                        _this.returnWay = "电话回访";
-                        if(_this.info.status!='审核中' && _this.info.status!="已审核")
-                            tip("这次需要提交电话回访哦~","bottom",2500);
-                            
+                GET_URL.GETCLASSCOUNT,
+                {
+                    workNumber:this.teacherInfo.workNumber,
+                    sno:this.info.sno
+                },
+                function(response){
+                    if(typeof response.data.count == 'number'){
+                        if( (response.data.count+1) % 3 == 0 ){
+                            _this.returnWay = "电话回访";
+                            if(_this.info.status!='审核中' && _this.info.status!="已审核")
+                                tip("这次需要提交电话回访哦~","bottom",2500);
+                                
+                        }else{
+                            _this.returnWay = "微信回访";
+                        }
                     }else{
-                        _this.returnWay = "微信回访";
-                    }
-                }else{
+                        tip("未知错误，请重试","bottom",1000);
+                        setTimeout(function(){
+                            _this.$emit('update:detailShow', false);
+                        },1000);
+                    }                
+                },
+                function(error){
+                    console.log(error);
                     tip("未知错误，请重试","bottom",1000);
                     setTimeout(function(){
                         _this.$emit('update:detailShow', false);
                     },1000);
-                }                
-            },
-            function(error){
-                console.log(error);
-                tip("未知错误，请重试","bottom",1000);
-                setTimeout(function(){
-                    _this.$emit('update:detailShow', false);
-                },1000);
-            });
+                });
+        }else{
+            this.returnWay = '微信回访';
         }
         
     },
@@ -229,18 +231,16 @@ export default{
         },
         confirm(){                              //实际课时输入框的确认按钮
             if(!this.realCourseTime){
-                this.realCourseTime = 1.5;
-                this.info.realCourseTime = 1.5;
-            }
-                
-            if( this.realCourseTime == '学生请假'){
+                this.realCourseTime = 0.5;
+                this.info.realCourseTime = 0.5;
+            }else if( this.realCourseTime == '学生请假'){
                 this.info.realCourseTime = 0;
                 this.remark += "(学生请假)";
-            }
-                
-            if( this.realCourseTime == '教师请假'){
+            }else if( this.realCourseTime == '教师请假'){
                 this.info.realCourseTime = 0;
                 this.remark += '(教师请假)';
+            }else{
+                this.info.realCourseTime = this.realCourseTime;
             }
                 
             this.popupVisible=false;
