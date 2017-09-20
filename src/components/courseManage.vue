@@ -148,6 +148,7 @@ export default{
                 }
                 if(response.data != 'error'){
                     _this.dataConversion(response.data);
+
                     _get(GET_URL.GETARRANGECLASS,
                     {
                         workNumber:this.teacherInfo.workNumber,
@@ -157,13 +158,14 @@ export default{
                     function(response){
                         if(response.data != 'error')
                             _this.dataConversion(response.data);
-                    },function(){
+                    },function(error){
+                        console.log(error);
                     });
                 }
                     
             },
             (error) =>{
-                
+                console.log(error);
             });
         },
         showHeader(){
@@ -376,21 +378,25 @@ export default{
         getHeaderDate(direction){
             if(direction == 1){
                 if( typeof this.dateInHeader[0] == 'string'){
-                    return this.currentYear + "-" + this.dateInHeader[0].slice(0,this.dateInHeader[0].length -1) + '-' + '01';
+                    return this.currentYear + "/" + this.dateInHeader[0].slice(0,this.dateInHeader[0].length -1) + '/' + '01';
                 }else{
-                    return this.currentYear + '-' + this.header.month + '-' + this.dateInHeader[0];
+                    return this.currentYear + '/' + this.header.month + '/' + this.dateInHeader[0];
                 }
             }else if(direction == -1){
                 var condition = this.dateInHeader.every( (item) =>{
                     return typeof item == 'number';
                 });
                 if(condition){
-                    return this.currentYear + '-' + this.header.month + '-' + this.dateInHeader[6];
+                    return this.header.month + '/' + this.dateInHeader[6] +"/"+this.currentYear +" " +"23:59:59";
                 }else{
                     if( typeof this.dateInHeader[6] == 'string'){
-                        return this.currentYear + '-' + (( this.header.month + 1 ) % 12 || 12) + '-' + '01';
+
+                        return (( this.header.month + 1 ) % 12 || 12) + "/" + '01' + "/" + this.currentYear + " " + "23:59:59";   
+                       
                     }else{
-                        return this.currentYear + '-' + (( this.header.month + 1 ) % 12 || 12) + '-' + this.dateInHeader[6];
+                    
+                        return  (( this.header.month + 1 ) % 12 || 12) + '/' + this.dateInHeader[6] + '/'+ this.currentYear + " " + "23:59:59";
+                       
                     }
                     
                 }
@@ -413,14 +419,10 @@ export default{
         .el-col {
             text-align: center;
             box-sizing: border-box;
-            /* height:3.7rem;
-            padding-top: 0.5rem; */
             height: 1rem;
             padding-top: 0.08rem;
             background: #f3f3f6;
             .month{
-                /* font-size: 1.7rem;
-                padding-top: 0.8rem; */
                 font-size:0.272rem;
                 padding-top:0.13rem;
             }
@@ -433,15 +435,11 @@ export default{
         }
     }
     .tableWrap{
-        /* top:7rem; */
         top: 1.92rem;
         left: 0;
         background: #f3f3f6;
         width: 100%;
         min-height: calc( 100% - 1.92rem );
-        /* .el-col-3{
-            min-height: 100%;
-        } */
         .table{
             box-sizing: border-box;
             text-align: center;

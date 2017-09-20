@@ -22,6 +22,7 @@ instance.interceptors.response.use((response) => {
 });
 
 export const _get = ( url ,data,okCallback,errorCallback)=>{
+
     instance.get(url,{
         params:data
     })
@@ -30,6 +31,7 @@ export const _get = ( url ,data,okCallback,errorCallback)=>{
 }
 
 export const _post = ( url ,data,okCallback,errorCallback)=>{
+
     instance.post(url,data)
         .then(okCallback)
         .catch(errorCallback)
