@@ -34,7 +34,7 @@
             </div>
             <div class="item">
                 <span class="infoTitle">计划课时</span><!-- 
-             --><span class="infoContent">{{info.courseHour}}</span>
+             --><span class="infoContent">{{info.courseNumber}}</span>
             </div>
             <div class="item" @click="showMtPopup()">
                 <span class="infoTitle">实际课时</span><!-- 
